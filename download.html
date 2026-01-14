@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deni Tools | Library Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            violet: '#8b5cf6',
+                            blue: '#3b82f6',
+                            dark: '#020617',
+                            slate: '#1e293b',
+                            emerald: '#10b981'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .premium-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .resource-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+        .active-filter {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-brand-dark text-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <header class="fixed top-0 w-full z-50 px-4 py-4 md:px-8">
+        <nav class="max-w-7xl mx-auto glass rounded-2xl p-3 md:p-4 flex justify-between items-center shadow-lg shadow-black/5">
+            <div class="flex items-center gap-3 pl-2">
+                <div class="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i data-lucide="library" class="w-6 h-6"></i>
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-xl font-extrabold tracking-tighter uppercase italic">LIBRARY.HUB</span>
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Repository & Tutorial</span>
+                </div>
+            </div>
+
+            <button id="theme-toggle" class="w-10 h-10 rounded-xl glass flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-yellow-400"></i>
+                <i data-lucide="moon" class="w-5 h-5 dark:hidden text-brand-blue"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="flex-grow pt-28 md:pt-36 pb-12 px-4 md:px-8 max-w-7xl mx-auto w-full">
+        
+        <!-- Search & Welcome -->
+        <div class="mb-12">
+            <h1 class="text-3xl font-black mb-2 tracking-tight">Pusat Sumber Belajar</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mb-8">Simpan dan akses semua materi Debian, MikroTik, serta file latihan LSP Anda di sini.</p>
+            
+            <div class="relative group max-w-2xl">
+                <i data-lucide="search" class="absolute left-4 top-4 w-5 h-5 text-slate-400 group-focus-within:text-brand-blue transition-colors"></i>
+                <input type="text" id="searchInput" onkeyup="filterResources()" placeholder="Cari tutorial, apk, atau modul..." 
+                    class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl py-4 pl-12 pr-4 outline-none focus:ring-4 focus:ring-brand-blue/10 focus:border-brand-blue transition-all shadow-sm">
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="flex gap-3 mb-10 overflow-x-auto no-scrollbar pb-2">
+            <button onclick="setFilter('all')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass active-filter" id="filter-all">Semua</button>
+            <button onclick="setFilter('ISO')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-ISO">ISO</button>
+            <button onclick="setFilter('apk')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-apk">Download APK</button>
+            <button onclick="setFilter('lsp')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-lsp">Latihan LSP</button>
+        </div>
+
+        <!-- Resources Grid -->
+        <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Items injected by JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-20">
+            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                <i data-lucide="folder-open" class="w-8 h-8"></i>
+            </div>
+            <h3 class="font-bold text-lg">Tidak Ditemukan</h3>
+            <p class="text-sm text-slate-500">Coba gunakan kata kunci pencarian yang lain.</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 py-10 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
+                Personal Learning Management System v1.0
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="#" class="w-8 h-8 rounded-full glass flex items-center justify-center hover:text-brand-blue"><i data-lucide="github" class="w-4 h-4"></i></a>
+                <a href="#" class="w-8 h-8 rounded-full glass flex items-center justify-center hover:text-brand-blue"><i data-lucide="external-link" class="w-4 h-4"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Data Management (Bisa diedit manual di sini)
+        const resources = [
+            // ISO
+            { title: "Debian 11 (Bullseye) ISO", cat: "ISO", type: "ISO", link: "https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/", desc: "File ISO Debian 11 untuk instalasi server atau desktop." },
+            { title: "Debian 12 (Bookworm) ISO", cat: "ISO", type: "ISO", link: "https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/", desc: "File ISO Debian 12 versi terbaru untuk server dan desktop." },
+            { title: "Windows ISO (Official)", cat: "ISO", type: "ISO", link: "https://www.microsoft.com/software-download/windows11", desc: "ISO Windows resmi dari Microsoft untuk instalasi sistem operasi." },
+            { title: "Trixbox ISO", cat: "ISO", type: "ISO", link: "https://sourceforge.net/projects/asteriskathome/files/", desc: "ISO Trixbox untuk server VoIP berbasis Asterisk." },
+
+            // APK
+            { title: "WinSCP", cat: "apk", type: "Aplikasi", link: "https://winscp.net/eng/download.php", desc: "Aplikasi transfer file SCP / SFTP / FTP untuk Windows (v6.x ± 11 MB)." },
+            { title: "FileZilla Client", cat: "apk", type: "Aplikasi", link: "https://filezilla-project.org/download.php?type=client", desc: "FTP, FTPS, dan SFTP client open-source (v3.x ± 20 MB)." },
+            { title: "PuTTY", cat: "apk", type: "Aplikasi", link: "https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html", desc: "SSH dan Telnet client untuk remote server (v0.8x ± 3 MB)." },
+            { title: "Winbox (MikroTik)", cat: "apk", type: "Aplikasi", link: "https://mikrotik.com/download", desc: "Aplikasi manajemen RouterOS MikroTik (v3.x ± 5 MB)." },
+            { title: "VirtualBox", cat: "apk", type: "Aplikasi", link: "https://www.virtualbox.org/wiki/Downloads", desc: "Software virtualisasi untuk menjalankan Debian (v7.x ± 110 MB)." },
+
+            // LSP
+            { title: "Contoh Soal Praktik LSP TKJ", cat: "lsp", type: "Contoh Soal", link: "#", desc: "Contoh soal praktik LSP TKJ meliputi konfigurasi IP, routing, dan service jaringan." },
+            { title: "Contoh Topologi Jaringan LSP", cat: "lsp", type: "Topologi", link: "#", desc: "Referensi topologi jaringan yang sering digunakan pada ujian LSP TKJ." },
+            { title: "File Simulasi Topologi LSP (.pkt)", cat: "lsp", type: "File Latihan", link: "#", desc: "File Cisco Packet Tracer berisi contoh topologi dan skenario ujian LSP." },
+        ];
+
+        let currentFilter = 'all';
+
+        function renderResources(data) {
+            const grid = document.getElementById('resourceGrid');
+            const empty = document.getElementById('emptyState');
+            grid.innerHTML = '';
+            
+            const filtered = data.filter(item => 
+                (currentFilter === 'all' || item.cat === currentFilter)
+            );
+
+            if (filtered.length === 0) {
+                empty.classList.remove('hidden');
+            } else {
+                empty.classList.add('hidden');
+                filtered.forEach(item => {
+                    const card = `
+                        <div class="resource-card glass rounded-3xl p-6 flex flex-col border border-transparent hover:border-brand-blue/20 shadow-md">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="text-[10px] font-black uppercase tracking-widest px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-md text-slate-500">
+                                    ${item.type}
+                                </span>
+                                <div class="p-2 bg-brand-blue/10 rounded-lg text-brand-blue">
+                                    <i data-lucide="${getIcon(item.cat)}" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+                            <h3 class="font-extrabold text-lg mb-2 leading-tight">${item.title}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 flex-grow leading-relaxed">
+                                ${item.desc}
+                            </p>
+                            <a href="${item.link}" class="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-800 font-bold text-sm text-center hover:bg-brand-blue hover:text-white transition-all flex items-center justify-center gap-2">
+                                Buka Link <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                });
+            }
+            lucide.createIcons();
+        }
+
+        function getIcon(cat) {
+            switch(cat) {
+                case 'debian': return 'terminal';
+                case 'mikrotik': return 'router';
+                case 'apk': return 'smartphone';
+                case 'lsp': return 'file-check';
+                default: return 'link';
+            }
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
+            document.getElementById(`filter-${filter}`).classList.add('active-filter');
+            filterResources();
+        }
+
+        function filterResources() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = resources.filter(item => 
+                (item.title.toLowerCase().includes(search) || item.desc.toLowerCase().includes(search))
+            );
+            renderResources(filtered);
+        }
+
+        // Theme Toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Init
+        window.onload = () => renderResources(resources);
+    </script>
+</body>
+</html>

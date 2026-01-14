@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deni Tools | Debian 11 Repositori & Guide</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            violet: '#8b5cf6',
+                            blue: '#3b82f6',
+                            dark: '#020617',
+                            slate: '#1e293b',
+                            debian: '#d70a53'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .premium-gradient {
+            background: linear-gradient(135deg, #d70a53 0%, #8b5cf6 100%);
+        }
+        .code-screen {
+            background: #0d1117;
+            border-radius: 1.5rem;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .btn-interact:active { transform: scale(0.96); }
+        .btn-interact:hover { transform: translateY(-2px); }
+
+        .repo-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .repo-card:hover {
+            border-color: #d70a53;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-brand-dark text-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <header class="fixed top-0 w-full z-50 px-4 py-4 md:px-8">
+        <nav class="max-w-7xl mx-auto glass rounded-2xl p-3 md:p-4 flex justify-between items-center shadow-lg shadow-black/5">
+            <div class="flex items-center gap-2 md:gap-3 pl-2">
+                <div class="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i data-lucide="terminal" class="w-6 h-6"></i>
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-xl font-extrabold tracking-tighter">DEBIAN.GUIDE</span>
+                    <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Bullseye 11 resources</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 md:gap-4">
+                <button id="theme-toggle" class="w-10 h-10 rounded-xl glass flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-grow pt-28 md:pt-36 pb-12 px-4 md:px-8 max-w-7xl mx-auto w-full">
+        
+        <div class="grid lg:grid-cols-12 gap-8">
+            
+            <!-- Sidebar: Information & Downloads -->
+            <div class="lg:col-span-5 space-y-6">
+                
+                <!-- Quick Download Links -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="https://cdimage.debian.org/cdimage/archive/11.7.0/amd64/iso-dvd/" target="_blank" class="glass p-6 rounded-3xl flex items-center justify-between group hover:border-brand-debian/50 transition-all border-l-4 border-brand-debian">
+                        <div>
+                            <h4 class="font-bold text-slate-900 dark:text-white">Download ISO</h4>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Debian 11.7.0</p>
+                        </div>
+                        <i data-lucide="download-cloud" class="w-6 h-6 text-brand-debian group-hover:scale-110 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Definition Card -->
+                <section class="glass p-6 md:p-8 rounded-[2.5rem] shadow-xl" data-aos="fade-right">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-brand-debian/10 text-brand-debian rounded-2xl flex items-center justify-center">
+                            <i data-lucide="info" class="w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-2xl font-extrabold tracking-tight">Apa itu Repositori?</h2>
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Repositori adalah server pusat tempat ribuan paket aplikasi Debian disimpan. Ini memungkinkan sistem operasi untuk mengunduh dan menginstal perangkat lunak secara otomatis melalui perintah <code class="bg-slate-100 dark:bg-slate-800 px-1 rounded">apt</code>.
+                        </p>
+                        <div class="p-4 rounded-2xl bg-brand-debian/5 border-l-4 border-brand-debian italic text-xs">
+                            "Repositori Debian 11 menggunakan kode nama <b>Bullseye</b>."
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Commands Card -->
+                <section class="glass p-6 md:p-8 rounded-[2.5rem] shadow-xl" data-aos="fade-right" data-aos-delay="100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-emerald-500/10 text-emerald-500 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="command" class="w-6 h-6"></i>
+                        </div>
+                        <h2 class="text-2xl font-extrabold tracking-tight">Perintah Dasar</h2>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div onclick="showCommand('apt-update')" class="repo-card glass p-4 rounded-2xl cursor-pointer flex justify-between items-center border border-transparent">
+                            <div>
+                                <h4 class="font-bold text-sm">Update Daftar Paket</h4>
+                                <code class="text-xs text-brand-violet">sudo apt update</code>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+                        <div onclick="showCommand('apt-upgrade')" class="repo-card glass p-4 rounded-2xl cursor-pointer flex justify-between items-center border border-transparent">
+                            <div>
+                                <h4 class="font-bold text-sm">Upgrade Sistem</h4>
+                                <code class="text-xs text-brand-violet">sudo apt upgrade</code>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+                        <div onclick="showCommand('apt-install')" class="repo-card glass p-4 rounded-2xl cursor-pointer flex justify-between items-center border border-transparent">
+                            <div>
+                                <h4 class="font-bold text-sm">Instal Aplikasi</h4>
+                                <code class="text-xs text-brand-violet">sudo apt install [nama]</code>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+                        <div onclick="showCommand('edit-repo')" class="repo-card glass p-4 rounded-2xl cursor-pointer flex justify-between items-center border border-transparent">
+                            <div>
+                                <h4 class="font-bold text-sm">Edit File Repositori</h4>
+                                <code class="text-xs text-brand-violet">nano /etc/apt/sources.list</code>
+                            </div>
+                            <i data-lucide="edit-3" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Main Output Area: Repositories -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col h-full shadow-2xl relative min-h-[500px]" data-aos="fade-left">
+                    
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+                            </div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] ml-2">/etc/apt/sources.list</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <select id="repoSelect" onchange="loadRepo()" class="bg-slate-100 dark:bg-slate-800 text-xs font-bold p-2.5 rounded-xl outline-none border-r-8 border-transparent transition-all">
+                                <option value="default"> Rekomendasi Admin</option>
+                                <option value="kambing">🇮🇩 UI (Kambing)</option>
+                                <option value="poliwangi">🇮🇩 Poliwangi</option>
+                                <option value="datautama">🇮🇩 Data Utama</option>
+                            </select>
+                            <button onclick="copyOutput()" id="copyBtn" class="flex items-center gap-2 px-5 py-2.5 premium-gradient text-white rounded-xl text-xs font-black shadow-lg btn-interact transition-all">
+                                <i data-lucide="copy" class="w-4 h-4"></i> SALIN REPO
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="relative flex-grow h-full">
+                        <textarea id="mainOutput" readonly class="w-full h-full min-h-[400px] p-6 code-screen text-emerald-400 font-mono text-sm leading-relaxed outline-none resize-none no-scrollbar" placeholder="# Pilih repositori di atas..."></textarea>
+                    </div>
+
+                    <div class="mt-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 flex items-start gap-3">
+                        <i data-lucide="alert-circle" class="w-5 h-5 text-brand-debian mt-0.5"></i>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            <b>Tips:</b> Gunakan repositori lokal (Indonesia) agar kecepatan download lebih maksimal saat melakukan update atau instalasi paket di server Anda.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto bg-slate-50/50 dark:bg-brand-dark/50 border-t border-slate-200 dark:border-slate-800 py-12 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex flex-col items-center md:items-start gap-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 premium-gradient rounded-lg flex items-center justify-center text-white font-black italic shadow-md">D</div>
+                    <span class="text-lg font-black tracking-tighter italic uppercase text-slate-800 dark:text-white">DENI.GUIDE</span>
+                </div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mt-1">
+                    Debian 11 Bullseye Repository Hub
+                </p>
+            </div>
+            <div class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] text-center">
+                © 2024 Deni.Net Studio • Linux Infrastructure
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Init
+        lucide.createIcons();
+        AOS.init({ duration: 800, once: true });
+
+        const outputField = document.getElementById('mainOutput');
+
+        const repos = {
+            default: `deb http://deb.debian.org/debian bullseye main contrib non-free
+deb-src http://deb.debian.org/debian bullseye main contrib non-free
+
+deb http://deb.debian.org/debian-security/ bullseye-security main contrib non-free
+deb-src http://deb.debian.org/debian-security/ bullseye-security main contrib non-free
+
+deb http://deb.debian.org/debian bullseye-updates main contrib non-free
+deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free`,
+            
+            kambing: `# Repositori Kambing UI (Indonesia)\ndeb http://kambing.ui.ac.id/debian/ bullseye main contrib non-free\ndeb-src http://kambing.ui.ac.id/debian/ bullseye main contrib non-free\n\ndeb http://kambing.ui.ac.id/debian-security/ bullseye-security main contrib non-free\ndeb-src http://kambing.ui.ac.id/debian-security/ bullseye-security main contrib non-free\n\ndeb http://kambing.ui.ac.id/debian/ bullseye-updates main contrib non-free\ndeb-src http://kambing.ui.ac.id/debian/ bullseye-updates main contrib non-free`,
+            
+            poliwangi: `# Repositori Poliwangi (Indonesia)\ndeb http://mirror.poliwangi.ac.id/debian/ bullseye main contrib non-free\ndeb-src http://mirror.poliwangi.ac.id/debian/ bullseye main contrib non-free\n\ndeb http://mirror.poliwangi.ac.id/debian-security/ bullseye-security main contrib non-free\ndeb-src http://mirror.poliwangi.ac.id/debian-security/ bullseye-security main contrib non-free\n\ndeb http://mirror.poliwangi.ac.id/debian/ bullseye-updates main contrib non-free\ndeb-src http://mirror.poliwangi.ac.id/debian/ bullseye-updates main contrib non-free`,
+
+            datautama: `# Repositori Data Utama (Indonesia)\ndeb http://kartolo.sby.datautama.net.id/debian/ bullseye main contrib non-free\ndeb-src http://kartolo.sby.datautama.net.id/debian/ bullseye main contrib non-free\n\ndeb http://kartolo.sby.datautama.net.id/debian-security/ bullseye-security main contrib non-free\ndeb-src http://kartolo.sby.datautama.net.id/debian-security/ bullseye-security main contrib non-free\n\ndeb http://kartolo.sby.datautama.net.id/debian/ bullseye-updates main contrib non-free\ndeb-src http://kartolo.sby.datautama.net.id/debian/ bullseye-updates main contrib non-free`
+        };
+
+        const commandDesc = {
+            'apt-update': `# Update adalah perintah untuk menyegarkan daftar paket\n# Sistem akan mengecek ke repositori apakah ada versi baru\nsudo apt update`,
+            'apt-upgrade': `# Upgrade adalah perintah untuk memasang versi terbaru dari paket yang terinstal\n# Jalankan apt update terlebih dahulu sebelum ini\nsudo apt upgrade -y`,
+            'apt-install': `# Install digunakan untuk menambah aplikasi baru ke sistem\n# Contoh menginstal web server apache2:\nsudo apt install apache2 -y`,
+            'edit-repo': `# Perintah ini membuka editor teks Nano untuk mengubah sources.list\n# Pastikan Anda berhati-hati saat mengubah file ini\nsudo nano /etc/apt/sources.list`
+        };
+
+        function loadRepo() {
+            const val = document.getElementById('repoSelect').value;
+            outputField.value = repos[val];
+        }
+
+        function showCommand(cmd) {
+            outputField.value = commandDesc[cmd];
+            // Smooth scroll to output on mobile
+            if(window.innerWidth < 1024) {
+                outputField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function copyOutput() {
+            if(!outputField.value) return;
+            outputField.select();
+            document.execCommand('copy');
+            
+            const btn = document.getElementById('copyBtn');
+            const original = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> COPIED!`;
+            btn.classList.replace('premium-gradient', 'bg-emerald-500');
+            lucide.createIcons();
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.classList.replace('bg-emerald-500', 'premium-gradient');
+                lucide.createIcons();
+            }, 2000);
+        }
+
+        // Initialize with default repo
+        window.onload = loadRepo;
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+    </script>
+</body>
+</html>

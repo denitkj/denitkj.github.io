@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deni Tools | Encryption Converter</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- CryptoJS for AES -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            violet: '#8b5cf6',
+                            blue: '#3b82f6',
+                            dark: '#020617',
+                            slate: '#1e293b',
+                            gold: '#f59e0b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .premium-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .btn-interact:active { transform: scale(0.96); }
+        .btn-interact:hover { transform: translateY(-2px); }
+
+        textarea {
+            scrollbar-width: thin;
+            scrollbar-color: #8b5cf6 transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-brand-dark text-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <header class="fixed top-0 w-full z-50 px-4 py-4 md:px-8">
+        <nav class="max-w-7xl mx-auto glass rounded-2xl p-3 md:p-4 flex justify-between items-center shadow-lg">
+            <div class="flex items-center gap-3 pl-2">
+                <div class="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i data-lucide="lock" class="w-6 h-6"></i>
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-xl font-extrabold tracking-tighter uppercase italic">ENCRYPT.CONV</span>
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Multi-Algorithm Engine</span>
+                </div>
+            </div>
+
+            <button id="theme-toggle" class="w-10 h-10 rounded-xl glass flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-yellow-400"></i>
+                <i data-lucide="moon" class="w-5 h-5 dark:hidden text-brand-blue"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-28 md:pt-36 pb-12 px-4 md:px-8 max-w-7xl mx-auto w-full">
+        
+        <div class="grid lg:grid-cols-12 gap-8">
+            
+            <!-- Left: Inputs & Method Selection -->
+            <div class="lg:col-span-5 space-y-6">
+                <section class="glass p-6 md:p-8 rounded-[2.5rem] shadow-xl border-t-4 border-brand-violet">
+                    <h2 class="text-xl font-black mb-6 flex items-center gap-2 tracking-tight">
+                        <i data-lucide="settings-2" class="w-5 h-5 text-brand-violet"></i> KONFIGURASI
+                    </h2>
+
+                    <div class="space-y-4">
+                        <!-- Method Select -->
+                        <div>
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Algoritma</label>
+                            <select id="algoSelect" onchange="handleAlgoChange()" class="w-full bg-slate-100 dark:bg-slate-900 border-none rounded-2xl p-4 font-bold text-sm outline-none focus:ring-2 focus:ring-brand-violet transition-all">
+                                <option value="rot13">ROT13 (Substitution)</option>
+                                <option value="caesar">Caesar Cipher</option>
+                                <option value="atbash">Atbash Cipher</option>
+                                <option value="xor">XOR (Symmetric)</option>
+                                <option value="aes">AES-256 (Advanced Encryption Standard)</option>
+                            </select>
+                        </div>
+
+                        <!-- Shift Input (for Caesar) -->
+                        <div id="shiftContainer" class="hidden">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Shift (Geser)</label>
+                            <input type="number" id="shiftInput" value="3" min="1" max="25" class="w-full bg-slate-100 dark:bg-slate-900 border-none rounded-2xl p-4 font-mono font-bold outline-none focus:ring-2 focus:ring-brand-violet">
+                        </div>
+
+                        <!-- Key Input (for XOR/AES) -->
+                        <div id="keyContainer" class="hidden">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Kunci / Password</label>
+                            <div class="relative">
+                                <i data-lucide="key" class="absolute left-4 top-4 w-5 h-5 text-slate-400"></i>
+                                <input type="text" id="keyInput" placeholder="Masukkan Kunci Rahasia..." class="w-full bg-slate-100 dark:bg-slate-900 border-none rounded-2xl p-4 pl-12 font-mono text-sm outline-none focus:ring-2 focus:ring-brand-violet">
+                            </div>
+                        </div>
+
+                        <div class="pt-4 grid grid-cols-2 gap-4">
+                            <button onclick="process('encrypt')" class="premium-gradient text-white py-4 rounded-2xl font-black text-sm shadow-lg btn-interact transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="lock" class="w-4 h-4"></i> ENKRIPSI
+                            </button>
+                            <button onclick="process('decrypt')" class="bg-slate-800 dark:bg-slate-700 text-white py-4 rounded-2xl font-black text-sm shadow-lg btn-interact transition-all flex items-center justify-center gap-2">
+                                <i data-lucide="unlock-keyhole" class="w-4 h-4"></i> DEKRIPSI
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Definition Box -->
+                <div class="glass p-6 rounded-3xl text-sm border-l-4 border-brand-blue">
+                    <h4 id="algoTitle" class="font-black mb-2 text-brand-blue uppercase italic">ROT13</h4>
+                    <p id="algoDesc" class="text-slate-500 dark:text-slate-400 leading-relaxed text-xs">
+                        Algoritma substitusi sederhana yang mengganti setiap huruf dengan huruf ke-13 setelahnya dalam alfabet.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right: Text Areas -->
+            <div class="lg:col-span-7 space-y-6">
+                <div class="glass p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative">
+                    <div class="flex flex-col space-y-6">
+                        <!-- Input Text -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center px-2">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Input Text</label>
+                                <button onclick="clearText('inputText')" class="text-[10px] font-bold text-red-400 hover:text-red-500 uppercase">Bersihkan</button>
+                            </div>
+                            <textarea id="inputText" class="w-full h-40 bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 font-mono text-sm outline-none focus:ring-2 focus:ring-brand-blue border border-slate-200 dark:border-slate-800 transition-all resize-none" placeholder="Masukkan teks di sini..."></textarea>
+                        </div>
+
+                        <div class="flex justify-center -my-2 z-10">
+                            <div class="w-10 h-10 bg-white dark:bg-brand-dark border-2 border-slate-100 dark:border-slate-800 rounded-full flex items-center justify-center text-slate-400">
+                                <i data-lucide="arrow-down" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+
+                        <!-- Output Text -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center px-2">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Result (Hasil)</label>
+                                <button onclick="copyOutput()" id="copyBtn" class="flex items-center gap-1.5 text-[10px] font-black text-brand-violet uppercase">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> Salin Hasil
+                                </button>
+                            </div>
+                            <textarea id="outputText" readonly class="w-full h-40 bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-6 font-mono text-sm outline-none border border-transparent transition-all resize-none text-emerald-500 dark:text-emerald-400" placeholder="Hasil akan muncul di sini..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 px-4 md:px-8 border-t border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 premium-gradient rounded-lg flex items-center justify-center text-white text-xs font-black shadow-lg">D</div>
+                <span class="text-sm font-black tracking-tight italic uppercase">DENI.CRYPTO</span>
+            </div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Keamanan data Anda bersifat lokal (Data tidak dikirim ke server).</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const algoData = {
+            rot13: {
+                title: "ROT13",
+                desc: "Substitusi sederhana yang memutar alfabet sejauh 13 langkah. Karena alfabet memiliki 26 huruf, mengenkripsi dua kali akan mengembalikan teks asli."
+            },
+            caesar: {
+                title: "Caesar Cipher",
+                desc: "Salah satu teknik tertua. Setiap huruf digeser sejauh nilai kunci (shift) tertentu dalam urutan alfabet."
+            },
+            atbash: {
+                title: "Atbash Cipher",
+                desc: "Metode substitusi unik di mana alfabet dibalik: A jadi Z, B jadi Y, dan seterusnya."
+            },
+            xor: {
+                title: "XOR Encryption",
+                desc: "Algoritma logika bitwise yang memproses setiap karakter teks dengan karakter kunci. Memerlukan kunci yang sama untuk membuka kembali."
+            },
+            aes: {
+                title: "AES-256",
+                desc: "Advanced Encryption Standard. Standar enkripsi militer dan perbankan yang sangat kuat. Memerlukan password sebagai kunci pengaman."
+            }
+        };
+
+        function handleAlgoChange() {
+            const val = document.getElementById('algoSelect').value;
+            const shiftCont = document.getElementById('shiftContainer');
+            const keyCont = document.getElementById('keyContainer');
+            
+            document.getElementById('algoTitle').innerText = algoData[val].title;
+            document.getElementById('algoDesc').innerText = algoData[val].desc;
+
+            shiftCont.classList.add('hidden');
+            keyCont.classList.add('hidden');
+
+            if (val === 'caesar') shiftCont.classList.remove('hidden');
+            if (val === 'xor' || val === 'aes') keyCont.classList.remove('hidden');
+        }
+
+        function process(mode) {
+            const algo = document.getElementById('algoSelect').value;
+            const input = document.getElementById('inputText').value;
+            const outField = document.getElementById('outputText');
+            let result = "";
+
+            if (!input) return;
+
+            switch(algo) {
+                case 'rot13':
+                    result = rot13(input);
+                    break;
+                case 'caesar':
+                    const shift = parseInt(document.getElementById('shiftInput').value) || 0;
+                    result = caesar(input, mode === 'encrypt' ? shift : -shift);
+                    break;
+                case 'atbash':
+                    result = atbash(input);
+                    break;
+                case 'xor':
+                    const xorKey = document.getElementById('keyInput').value;
+                    if(!xorKey) return alertMessage("Kunci XOR diperlukan!");
+                    result = xorCipher(input, xorKey);
+                    break;
+                case 'aes':
+                    const aesKey = document.getElementById('keyInput').value;
+                    if(!aesKey) return alertMessage("Password AES diperlukan!");
+                    try {
+                        if (mode === 'encrypt') {
+                            result = CryptoJS.AES.encrypt(input, aesKey).toString();
+                        } else {
+                            const bytes = CryptoJS.AES.decrypt(input, aesKey);
+                            result = bytes.toString(CryptoJS.enc.Utf8);
+                            if (!result) throw new Error();
+                        }
+                    } catch(e) {
+                        result = "Gagal Dekripsi! Pastikan teks dan password benar.";
+                    }
+                    break;
+            }
+
+            outField.value = result;
+        }
+
+        // --- ALGORITHMS ---
+
+        function rot13(str) {
+            return str.replace(/[a-zA-Z]/g, function(c) {
+                return String.fromCharCode((c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26);
+            });
+        }
+
+        function caesar(str, shift) {
+            if (shift < 0) shift = 26 + (shift % 26);
+            return str.split('').map(c => {
+                if (c.match(/[a-z]/i)) {
+                    const code = c.charCodeAt();
+                    const start = (code >= 65 && code <= 90) ? 65 : 97;
+                    return String.fromCharCode(((code - start + shift) % 26) + start);
+                }
+                return c;
+            }).join('');
+        }
+
+        function atbash(str) {
+            const alpha = "abcdefghijklmnopqrstuvwxyz";
+            const reversed = "zyxwvutsrqponmlkjihgfedcba";
+            return str.split('').map(c => {
+                const lower = c.toLowerCase();
+                const index = alpha.indexOf(lower);
+                if (index !== -1) {
+                    const res = reversed[index];
+                    return c === c.toUpperCase() ? res.toUpperCase() : res;
+                }
+                return c;
+            }).join('');
+        }
+
+        function xorCipher(str, key) {
+            let result = "";
+            for (let i = 0; i < str.length; i++) {
+                result += String.fromCharCode(str.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return result;
+        }
+
+        // --- UI UTILS ---
+
+        function clearText(id) {
+            document.getElementById(id).value = "";
+        }
+
+        function alertMessage(msg) {
+            // Pengganti alert standar
+            const out = document.getElementById('outputText');
+            out.value = `[ERROR]: ${msg}`;
+        }
+
+        function copyOutput() {
+            const out = document.getElementById('outputText');
+            if (!out.value) return;
+            out.select();
+            document.execCommand('copy');
+            
+            const btn = document.getElementById('copyBtn');
+            const original = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5"></i> Berhasil Disalin!`;
+            lucide.createIcons();
+            setTimeout(() => {
+                btn.innerHTML = original;
+                lucide.createIcons();
+            }, 2000);
+        }
+
+        // Theme Toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Init
+        window.onload = handleAlgoChange;
+    </script>
+</body>
+</html>

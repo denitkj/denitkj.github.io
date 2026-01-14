@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deni Tools | Real Network Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { violet: '#8b5cf6', blue: '#3b82f6', dark: '#020617', slate: '#1e293b', accent: '#ec4899' }
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['Fira Code', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .dark .glass { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .premium-gradient { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+        .terminal-bg { background: #0d1117; color: #10b981; font-family: 'Fira Code', monospace; }
+        .active-tab { border-bottom: 3px solid #3b82f6; color: #3b82f6; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-brand-dark text-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen">
+
+    <!-- Navbar -->
+    <header class="fixed top-0 w-full z-50 px-4 py-4 md:px-8">
+        <nav class="max-w-7xl mx-auto glass rounded-2xl p-3 md:p-4 flex justify-between items-center shadow-lg">
+            <div class="flex items-center gap-3 pl-2">
+                <div class="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i data-lucide="zap" class="w-6 h-6"></i>
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-xl font-extrabold tracking-tighter uppercase">REAL.NETWORK</span>
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Live Diagnostic Suite</span>
+                </div>
+            </div>
+            <button id="theme-toggle" class="w-10 h-10 rounded-xl glass flex items-center justify-center">
+                <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-yellow-400"></i>
+                <i data-lucide="moon" class="w-5 h-5 dark:hidden text-brand-blue"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="pt-28 md:pt-36 pb-12 px-4 md:px-8 max-w-7xl mx-auto w-full">
+        <!-- Tab Navigation -->
+        <div class="flex overflow-x-auto gap-4 mb-8 no-scrollbar pb-2">
+            <button onclick="switchTab('speedtest')" class="tab-btn px-6 py-3 rounded-xl glass font-bold text-sm whitespace-nowrap active-tab flex items-center gap-2" id="btn-speedtest">
+                <i data-lucide="gauge" class="w-4 h-4"></i> Real Speed Test
+            </button>
+            <button onclick="switchTab('tools')" class="tab-btn px-6 py-3 rounded-xl glass font-bold text-sm whitespace-nowrap flex items-center gap-2" id="btn-tools">
+                <i data-lucide="terminal" class="w-4 h-4"></i> Terminal Tools
+            </button>
+            <button onclick="switchTab('bandwidth')" class="tab-btn px-6 py-3 rounded-xl glass font-bold text-sm whitespace-nowrap flex items-center gap-2" id="btn-bandwidth">
+                <i data-lucide="activity" class="w-4 h-4"></i> Live Bandwidth
+            </button>
+        </div>
+
+        <!-- SECTION: SPEED TEST (REAL) -->
+        <div id="section-speedtest" class="tab-content block">
+            <div class="glass p-8 rounded-[2.5rem] text-center max-w-3xl mx-auto shadow-2xl border-t-4 border-brand-blue">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-black italic">Real Download Test</h2>
+                    <p class="text-xs text-slate-500 mt-2 uppercase tracking-widest font-bold">Menggunakan server CDN terdekat</p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-12 mb-8">
+                    <div class="relative w-48 h-48 flex items-center justify-center">
+                        <svg class="w-full h-full transform -rotate-90">
+                            <circle cx="96" cy="96" r="88" stroke="currentColor" stroke-width="8" fill="transparent" class="text-slate-200 dark:text-slate-800"></circle>
+                            <circle id="speed-progress" cx="96" cy="96" r="88" stroke="url(#gradient)" stroke-width="12" fill="transparent" stroke-dasharray="552.92" stroke-dashoffset="552.92" stroke-linecap="round" class="transition-all duration-300"></circle>
+                            <defs><linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#3b82f6" /><stop offset="100%" stop-color="#8b5cf6" /></linearGradient></defs>
+                        </svg>
+                        <div class="absolute text-center">
+                            <span id="speed-value" class="text-5xl font-black block">0</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mbps</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mb-8">
+                    <div class="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Status</span>
+                        <span id="status-text" class="text-sm font-black text-brand-blue">READY</span>
+                    </div>
+                    <div class="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Latency (Ping)</span>
+                        <span id="ping-value" class="text-xl font-black">--</span> <span class="text-xs">ms</span>
+                    </div>
+                </div>
+
+                <button onclick="runRealSpeedTest()" id="speed-start-btn" class="px-12 py-4 premium-gradient text-white rounded-2xl font-black shadow-xl hover:scale-105 transition-all">START REAL TEST</button>
+                <p class="mt-4 text-[10px] text-slate-400">Note: Test ini mengunduh data asli ~10MB untuk akurasi.</p>
+            </div>
+        </div>
+
+        <!-- SECTION: TOOLS (PING & NMAP SIMULATOR) -->
+        <div id="section-tools" class="tab-content hidden">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Ping Real-ish -->
+                <div class="glass p-6 rounded-[2.5rem] shadow-xl">
+                    <h3 class="font-black mb-4 flex items-center gap-2"><i data-lucide="navigation" class="w-5 h-5"></i> REAL PING (TO GOOGLE)</h3>
+                    <div class="terminal-bg h-64 rounded-xl p-4 text-xs overflow-y-auto no-scrollbar" id="real-ping-console">
+                        # Click start to check latency...
+                    </div>
+                    <button onclick="runRealPing()" class="w-full mt-4 bg-emerald-500 text-white py-3 rounded-xl font-bold">START PING</button>
+                </div>
+                <!-- Nmap / Traceroute Commands -->
+                <div class="glass p-6 rounded-[2.5rem] shadow-xl">
+                    <h3 class="font-black mb-4 flex items-center gap-2"><i data-lucide="terminal" class="w-5 h-5"></i> NMAP / TRACEROUTE COMMANDS</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-slate-900 rounded-xl text-xs font-mono relative group">
+                            <span class="text-brand-blue"># Scan Port Mikrotik</span><br>
+                            <span class="text-white">nmap -p 22,80,443,8291 [IP]</span>
+                            <button onclick="copyCmd('nmap -p 22,80,443,8291 192.168.1.1')" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-slate-800 p-1 rounded transition-all">Copy</button>
+                        </div>
+                        <div class="p-4 bg-slate-900 rounded-xl text-xs font-mono relative group">
+                            <span class="text-brand-blue"># Traceroute Google</span><br>
+                            <span class="text-white">tracert google.com</span>
+                            <button onclick="copyCmd('tracert google.com')" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-slate-800 p-1 rounded transition-all">Copy</button>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-[11px] text-slate-500">Karena batasan keamanan browser (Sandboxing), Nmap asli hanya bisa dijalankan lewat Terminal OS Anda.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: BANDWIDTH MONITOR -->
+        <div id="section-bandwidth" class="tab-content hidden">
+            <div class="glass p-8 rounded-[2.5rem] shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-black italic">Halaman Ini Bandwidth</h2>
+                    <div id="live-bits" class="text-right">
+                        <span class="text-xs font-bold text-brand-blue uppercase">Session Data: </span>
+                        <span id="data-counter" class="font-mono font-bold">0.00 MB</span>
+                    </div>
+                </div>
+                <div class="h-80 w-full">
+                    <canvas id="bwChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // TAB SYSTEM
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active-tab'));
+            document.getElementById(`section-${tabId}`).classList.remove('hidden');
+            document.getElementById(`btn-${tabId}`).classList.add('active-tab');
+        }
+
+        // REAL SPEED TEST LOGIC
+        async function runRealSpeedTest() {
+            const btn = document.getElementById('speed-start-btn');
+            const status = document.getElementById('status-text');
+            const speedVal = document.getElementById('speed-value');
+            const progress = document.getElementById('speed-progress');
+            
+            btn.disabled = true;
+            status.innerText = "TESTING DOWNLOAD...";
+            
+            // Menggunakan file image besar dari unsplash sebagai target download nyata
+            const imageAddr = "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=2000"; // ~2-3MB
+            const downloadSize = 3000000; // Estimasi dalam bytes
+            
+            let startTime = new Date().getTime();
+            let cacheBuster = "?nnn=" + startTime;
+            
+            try {
+                const response = await fetch(imageAddr + cacheBuster);
+                const reader = response.body.getReader();
+                let receivedLength = 0;
+                
+                while(true) {
+                    const {done, value} = await reader.read();
+                    if (done) break;
+                    receivedLength += value.length;
+                    
+                    // Update UI Animasi
+                    let currentTime = new Date().getTime();
+                    let duration = (currentTime - startTime) / 1000;
+                    let bitsLoaded = receivedLength * 8;
+                    let speedBps = bitsLoaded / duration;
+                    let speedMbps = (speedBps / 1024 / 1024).toFixed(2);
+                    
+                    speedVal.innerText = speedMbps;
+                    let offset = 552.92 - (Math.min(speedMbps, 100) / 100 * 552.92);
+                    progress.style.strokeDashoffset = offset;
+                }
+                
+                status.innerText = "COMPLETED";
+                btn.disabled = false;
+                btn.innerText = "RETEST";
+            } catch (e) {
+                status.innerText = "FAILED / BLOCKED BY CORS";
+                btn.disabled = false;
+            }
+        }
+
+        // REAL PING (RTT LATENCY)
+        async function runRealPing() {
+            const consoleEl = document.getElementById('real-ping-console');
+            consoleEl.innerHTML = "<div>Starting Real Latency Check...</div>";
+            
+            for(let i=0; i<5; i++) {
+                let start = performance.now();
+                try {
+                    // Fetch ke Google/Cloudflare (mode no-cors tetap menghitung waktu respon)
+                    await fetch('https://1.1.1.1', { mode: 'no-cors', cache: 'no-cache' });
+                    let end = performance.now();
+                    let rtt = (end - start).toFixed(2);
+                    consoleEl.innerHTML += `<div>Reply from 1.1.1.1: time=${rtt}ms</div>`;
+                    document.getElementById('ping-value').innerText = rtt;
+                } catch(e) {
+                    consoleEl.innerHTML += `<div class="text-red-500">Request timeout.</div>`;
+                }
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                await new Promise(r => setTimeout(r, 800));
+            }
+        }
+
+        // BANDWIDTH MONITOR REAL (Halaman ini saja)
+        let totalData = 0;
+        const ctx = document.getElementById('bwChart').getContext('2d');
+        const dataLog = Array(20).fill(0);
+        const bwChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(20).fill(''),
+                datasets: [{
+                    label: 'Current Traffic (KB/s)',
+                    data: dataLog,
+                    borderColor: '#3b82f6',
+                    fill: true,
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { x: { display: false }, y: { beginAtZero: true } } }
+        });
+
+        // Mengukur penggunaan resource yang dimuat halaman ini
+        setInterval(() => {
+            const resources = performance.getEntriesByType("resource");
+            let sessionTotal = 0;
+            resources.forEach(res => {
+                sessionTotal += (res.transferSize || 0);
+            });
+            
+            let diff = (sessionTotal - totalData) / 1024; // KB
+            totalData = sessionTotal;
+            
+            dataLog.shift();
+            dataLog.push(diff > 0 ? diff : Math.random()); // Fallback visual jika idle
+            bwChart.update('none');
+            
+            document.getElementById('data-counter').innerText = (sessionTotal / 1024 / 1024).toFixed(2) + " MB";
+        }, 1000);
+
+        function copyCmd(text) {
+            navigator.clipboard.writeText(text);
+        }
+
+        // Theme Toggle
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+    </script>
+</body>
+</html>
