@@ -1224,8 +1224,7 @@ function changePreview(s) {
     img.style.opacity = '0';
     setTimeout(() => { img.src = s; img.style.opacity = '1'; }, 200);
 }
-    </script>
-    <script>
+
 document.addEventListener("DOMContentLoaded", () => {
     const projects = document.querySelectorAll(".project-card");
 
@@ -1235,6 +1234,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }, index * 120);
     });
 });
+
+
+function scrollCert(direction) {
+  const container = document.getElementById("certScroll");
+  const scrollAmount = container.clientWidth * 0.8;
+
+  container.scrollBy({
+    left: direction * scrollAmount,
+    behavior: "smooth"
+  });
+}
 </script>
 
 </body>
