@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -327,28 +327,47 @@
             if(startFourthOctet > 255) return alert('Blok ke-' + blockNum + ' melebihi batas oktet subnet /' + cidr);
 
             const netAddr = `${ipParts[0]}.${ipParts[1]}.${ipParts[2]}.${startFourthOctet}`;
-            const firstIP = `${ipParts[0]}.${ipParts[1]}.${ipParts[2]}.${startFourthOctet + 1}`;
+            const gateway = `${ipParts[0]}.${ipParts[1]}.${ipParts[2]}.${startFourthOctet + 1}`;
+            const firstIP = gateway;
+            const subnetMask = cidrToSubnetMask(cidr);
             const lastIP = `${ipParts[0]}.${ipParts[1]}.${ipParts[2]}.${startFourthOctet + blockSize - 2}`;
             const broadcast = `${ipParts[0]}.${ipParts[1]}.${ipParts[2]}.${startFourthOctet + blockSize - 1}`;
 
             resDiv.classList.remove('hidden');
-            resDiv.innerHTML = `
-                <div class="space-y-3">
-                    <p class="text-[10px] font-black text-brand-violet uppercase">Hasil Blok Ke-${blockNum} (/${cidr})</p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Network</p>
-                            <p class="font-mono text-sm font-bold">${netAddr}</p>
-                        </div>
-                        <div>
-                            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Broadcast</p>
-                            <p class="font-mono text-sm font-bold">${broadcast}</p>
-                        </div>
-                    </div>
-                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Range Usable Host</p>
-                    <p class="font-mono text-xs font-bold text-brand-violet">${firstIP} — ${lastIP}</p>
-                </div>
-            `;
+resDiv.innerHTML = `
+<div class="space-y-3">
+    <p class="text-[10px] font-black text-brand-violet uppercase">
+        Hasil Blok Ke-${blockNum} (/${cidr})
+    </p>
+
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <p class="text-[9px] font-bold text-slate-400 uppercase">Network</p>
+            <p class="font-mono text-sm font-bold">${netAddr}</p>
+        </div>
+        <div>
+            <p class="text-[9px] font-bold text-slate-400 uppercase">Broadcast</p>
+            <p class="font-mono text-sm font-bold">${broadcast}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <p class="text-[9px] font-bold text-slate-400 uppercase">Gateway</p>
+            <p class="font-mono text-sm font-bold text-emerald-500">${gateway}</p>
+        </div>
+        <div>
+            <p class="text-[9px] font-bold text-slate-400 uppercase">Subnet Mask</p>
+            <p class="font-mono text-sm font-bold">${subnetMask}</p>
+        </div>
+    </div>
+
+    <p class="text-[9px] font-bold text-slate-400 uppercase">Range Usable Host</p>
+    <p class="font-mono text-xs font-bold text-brand-violet">
+        ${firstIP} — ${lastIP}
+    </p>
+</div>
+`;
 
             const script = `# IP CALCULATION: BLOK ${blockNum}\n# Net: ${netAddr}/${cidr}\n# Host: ${firstIP}-${lastIP}\n# Broad: ${broadcast}\n\n/ip address add address=${netAddr}/${cidr} interface=ether1 comment="Subnet_Block_${blockNum}"`;
             document.getElementById('mainOutput').value = script;
@@ -371,7 +390,7 @@ function generateBlockScript() {
        HTTP BLOCK (PORT 80)
        ======================= */
     if (currentProtocol === 'http') {
-
+        script += `/ip proxy set anonymous=yes\n`;
         script += `/ip proxy set enabled=yes port=8080 cache-administrator=${admin}\n`;
         script += `/ip proxy set max-cache-size=unlimited
 \n\n`;
@@ -432,6 +451,16 @@ function generateBlockScript() {
         document.getElementById('theme-toggle').addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
         });
+
+        function cidrToSubnetMask(cidr) {
+    let mask = [];
+    for (let i = 0; i < 4; i++) {
+        let bits = Math.min(cidr, 8);
+        mask.push(256 - Math.pow(2, 8 - bits));
+        cidr -= bits;
+    }
+    return mask.join('.');
+}
     </script>
 </body>
 </html>
