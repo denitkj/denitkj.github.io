@@ -113,7 +113,7 @@
             <button onclick="setFilter('all')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass active-filter" id="filter-all">Semua</button>
             <button onclick="setFilter('ISO')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-ISO">ISO</button>
             <button onclick="setFilter('mikrotik')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-mikrotik">MikroTik</button>
-            <button onclick="setFilter('tutorial')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-tutorial">Debian</button>
+            <button onclick="setFilter('tutorial')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-tutorial">Code</button>
             <button onclick="setFilter('apk')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-apk">APK</button>
             <button onclick="setFilter('lsp')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-lsp">LSP</button>
         </div>
@@ -183,6 +183,21 @@
                 code: "/export compact file=nama_file_backup",
                 desc: "Gunakan perintah <code>/system backup save</code> untuk membuat file .backup terenkripsi." 
             },
+            {
+                title: "Restart Network Debian",
+                cat: "linux",
+                type: "Terminal",
+                code: "sudo systemctl restart networking",
+                desc: "Digunakan untuk me-restart layanan jaringan di Debian berbasis systemd tanpa reboot sistem."
+            },
+            {
+                title: "Edit Repository Debian",
+                cat: "linux",
+                type: "Terminal",
+                code: "sudo nano /etc/apt/sources.list",
+                desc: "Digunakan untuk mengedit daftar repository Debian sebelum melakukan update atau upgrade paket."
+            },
+
            
 
             // ISO
