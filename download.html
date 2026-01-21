@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="icon" type="image/png" href="icon.png">
 
     <script>
         tailwind.config = {
@@ -100,12 +99,13 @@
         </div>
 
         <!-- Categories -->
-        <div class="flex gap-3 mb-10 overflow-x-auto no-scrollbar pb-2">
-            <button onclick="setFilter('all')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass active-filter" id="filter-all">Semua</button>
-            <button onclick="setFilter('ISO')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-ISO">ISO</button>
-            <button onclick="setFilter('apk')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-apk">Download APK</button>
-            <button onclick="setFilter('lsp')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-lsp">Latihan LSP</button>
-        </div>
+<div class="flex gap-3 mb-10 overflow-x-auto no-scrollbar pb-2">
+    <button onclick="setFilter('all')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass active-filter" id="filter-all">Semua</button>
+    <button onclick="setFilter('ISO')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-ISO">ISO</button>
+    <button onclick="setFilter('apk')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-apk">Download APK</button>
+    <button onclick="setFilter('lsp')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-lsp">Latihan LSP</button>
+    <button onclick="setFilter('tutorial')" class="filter-btn px-6 py-2.5 rounded-xl font-bold text-sm glass" id="filter-tutorial">Tutorial Server</button>
+</div>
 
         <!-- Resources Grid -->
         <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -153,6 +153,25 @@
             { title: "PuTTY", cat: "apk", type: "Aplikasi", link: "https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html", desc: "SSH dan Telnet client untuk remote server (v0.8x ± 3 MB)." },
             { title: "Winbox (MikroTik)", cat: "apk", type: "Aplikasi", link: "https://mikrotik.com/download", desc: "Aplikasi manajemen RouterOS MikroTik (v3.x ± 5 MB)." },
             { title: "VirtualBox", cat: "apk", type: "Aplikasi", link: "https://www.virtualbox.org/wiki/Downloads", desc: "Software virtualisasi untuk menjalankan Debian (v7.x ± 110 MB)." },
+           
+            // TUTORIAL SERVER
+        
+            {
+            title: "File Lengkap Konfigurasi DNS Server Debian (BIND9)",
+            cat: "tutorial",
+            type: "Tutorial",
+            link: "https://rafimf.gitlab.io/notes/network/linux/konfigurasi-dnsserver-di-debian/",
+            desc: "Berisi file lengkap konfigurasi DNS Server Debian menggunakan BIND9, meliputi named.conf.local, named.conf.options, file zona forward & reverse, serta contoh pengujian nslookup dan dig. Cocok untuk praktik TKJ, simulasi server, dan ujian LSP."
+            },
+
+            {
+            title: "File Lengkap Konfigurasi Debian Server (All Services)",
+            cat: "tutorial",
+            type: "Tutorial",
+            link: "DEBIAN11.pdf",
+            desc: "Kumpulan file lengkap konfigurasi Debian Server meliputi konfigurasi jaringan, DNS Server (BIND9), DHCP Server, SSH Server, FTP Server, Web Server (Apache), serta manajemen user dan permission. Cocok untuk pembelajaran TKJ, simulasi server, dan persiapan ujian LSP."
+            },
+
 
             // LSP
             { title: "Contoh Soal Praktik LSP TKJ", cat: "lsp", type: "Contoh Soal", link: "#", desc: "Contoh soal praktik LSP TKJ meliputi konfigurasi IP, routing, dan service jaringan." },
@@ -201,15 +220,16 @@
             lucide.createIcons();
         }
 
-        function getIcon(cat) {
-            switch(cat) {
-                case 'debian': return 'terminal';
-                case 'mikrotik': return 'router';
-                case 'apk': return 'smartphone';
-                case 'lsp': return 'file-check';
-                default: return 'link';
-            }
-        }
+function getIcon(cat) {
+    switch(cat) {
+        case 'tutorial': return 'book-open';
+        case 'apk': return 'smartphone';
+        case 'lsp': return 'file-check';
+        case 'ISO': return 'disc';
+        default: return 'link';
+    }
+}
+
 
         function setFilter(filter) {
             currentFilter = filter;
