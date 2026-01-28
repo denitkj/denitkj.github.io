@@ -414,15 +414,16 @@ function generateBlockScript() {
        ======================= */
  else {
 
-    script += `# Blocking sesuai Winbox (Content)\n`;
+script += `# Blocking sesuai Winbox (Layer7)\n`;
 
-    if (selectedIfaces.length > 0) {
-        selectedIfaces.forEach(iface => {
-            script += `/ip firewall filter add chain=forward protocol=tcp in-interface=${iface} content=${target} action=drop comment="${target} on ${iface}"\n`;
-        });
-    } else {
-        script += `/ip firewall filter add chain=forward protocol=tcp content=${target} action=drop comment="Global Block ${target}"\n`;
-    }
+if (selectedIfaces.length > 0) {
+    selectedIfaces.forEach(iface => {
+        script += `/ip firewall filter add chain=forward protocol=tcp dst-port=80 in-interface=${iface} layer7-protocol=${target}-l7 action=drop comment="${target} on ${iface} (L7)"\n`;
+    });
+} else {
+    script += `/ip firewall filter add chain=forward protocol=tcp dst-port=80 layer7-protocol=${target}-l7 action=drop comment="Global Block ${target} (L7)"\n`;
+}
+
 }
 
 
