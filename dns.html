@@ -7,7 +7,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- AOS Animation -->
@@ -23,14 +23,26 @@
                         brand: {
                             violet: '#8b5cf6',
                             blue: '#3b82f6',
-                            dark: '#020617',
+                            dark: '#09090b', /* Lebih gelap untuk kesan modern */
                             slate: '#1e293b',
-                            debian: '#d70a53'
+                            debian: '#d70a53',
+                            surface: '#18181b'
                         }
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        mono: ['Fira Code', 'monospace'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
                     }
                 }
             }
@@ -38,147 +50,212 @@
     </script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass {
+        
+        /* Minimalist Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+
+        .glass-panel {
             background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
-        .dark .glass {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .dark .glass-panel {
+            background: rgba(24, 24, 27, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .premium-gradient {
+
+        .gradient-text {
+            background: linear-gradient(135deg, #d70a53 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .gradient-bg {
             background: linear-gradient(135deg, #d70a53 0%, #8b5cf6 100%);
         }
-        .code-screen {
-            background: #0d1117;
-            border-radius: 1.25rem;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+
+        .terminal-window {
+            background: #09090b;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
         }
-        .btn-interact:active { transform: scale(0.96); }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Input Autofill Fix */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #f4f4f5 inset !important;
+            -webkit-text-fill-color: #000 !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        .dark input:-webkit-autofill,
+        .dark input:-webkit-autofill:hover, 
+        .dark input:-webkit-autofill:focus, 
+        .dark input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #18181b inset !important;
+            -webkit-text-fill-color: #fff !important;
+        }
     </style>
 </head>
-<body class="bg-white dark:bg-brand-dark text-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
+<body class="bg-gray-50 dark:bg-brand-dark text-slate-800 dark:text-slate-200 transition-colors duration-500 min-h-screen flex flex-col selection:bg-brand-debian/30">
+
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-debian/10 rounded-full mix-blend-multiply filter blur-[128px] opacity-70 animate-blob"></div>
+        <div class="absolute top-0 right-1/4 w-96 h-96 bg-brand-violet/10 rounded-full mix-blend-multiply filter blur-[128px] opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-[128px] opacity-70 animate-blob animation-delay-4000"></div>
+    </div>
 
     <!-- Navbar -->
-    <header class="fixed top-0 w-full z-50 px-4 py-4 md:px-8">
-        <nav class="max-w-7xl mx-auto glass rounded-2xl p-3 flex justify-between items-center shadow-lg border border-white/20">
-            <div class="flex items-center gap-3 pl-2">
-                <div class="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center text-white shadow-lg">
-                    <i data-lucide="zap" class="w-6 h-6"></i>
+    <header class="fixed top-0 w-full z-50 px-4 py-4">
+        <nav class="max-w-6xl mx-auto glass-panel rounded-full px-6 py-3 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center text-white shadow-lg rotate-3">
+                    <i data-lucide="terminal" class="w-4 h-4"></i>
                 </div>
                 <div class="flex flex-col leading-none">
-                    <span class="text-xl font-extrabold tracking-tighter uppercase">Debian.Script</span>
-                    <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">AIO DNS & Repo Tool</span>
+                    <span class="text-base font-bold tracking-tight text-slate-800 dark:text-white">Debian<span class="text-brand-debian">.Script</span></span>
                 </div>
             </div>
 
-            <button id="theme-toggle" class="w-10 h-10 rounded-xl glass flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-yellow-400"></i>
-                <i data-lucide="moon" class="w-5 h-5 dark:hidden text-brand-violet"></i>
+            <button id="theme-toggle" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center hover:scale-105 transition-all text-slate-600 dark:text-slate-300">
+                <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
             </button>
         </nav>
     </header>
 
-    <main class="flex-grow pt-28 md:pt-36 pb-20 px-4 md:px-8 max-w-7xl mx-auto w-full">
+    <main class="flex-grow pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto w-full relative z-10">
         
-        <!-- Input Section -->
-        <div class="mb-12" data-aos="fade-down">
-            <div class="glass p-8 rounded-[2.5rem] shadow-2xl border-t-4 border-brand-debian relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-debian/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-                
-                <div class="flex flex-col md:flex-row items-end gap-6 relative z-10">
-                    <div class="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Nama Domain</label>
-                            <div class="relative">
-                                <i data-lucide="globe" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
-                                <input type="text" id="domainInput" value="contoh.local" 
-                                    class="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-slate-900/50 border border-transparent focus:border-brand-debian/50 rounded-2xl outline-none transition-all font-bold text-lg">
+        <!-- Hero Input Section -->
+        <div class="max-w-4xl mx-auto mb-16" data-aos="fade-up">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white">
+                    Konfigurasi Server <span class="gradient-text">Otomatis</span>
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 text-lg">Generate script repositori, instalasi, dan DNS Bind9 dalam hitungan detik.</p>
+            </div>
+
+            <div class="glass-panel p-2 rounded-[2rem] shadow-2xl">
+                <div class="bg-white/50 dark:bg-brand-surface rounded-[1.5rem] p-6 md:p-8 border border-slate-200 dark:border-white/5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="group">
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 ml-1">Nama Domain</label>
+                            <div class="relative transition-all duration-300 group-focus-within:-translate-y-1">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i data-lucide="globe" class="w-5 h-5 text-slate-400 group-focus-within:text-brand-debian transition-colors"></i>
+                                </div>
+                                <input type="text" id="domainInput" value="sekolah.sch.id" 
+                                    class="block w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-black/20 border border-transparent focus:border-brand-debian/30 focus:bg-white dark:focus:bg-black/40 rounded-xl outline-none transition-all font-mono text-sm md:text-base font-medium placeholder-slate-400 dark:text-white" placeholder="contoh.local">
                             </div>
                         </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">IP Address Server</label>
-                            <div class="relative">
-                                <i data-lucide="server" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
-                                <input type="text" id="ipInput" value="192.168.20.2" 
-                                    class="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-slate-900/50 border border-transparent focus:border-brand-debian/50 rounded-2xl outline-none transition-all font-bold text-lg">
+                        <div class="group">
+                            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 ml-1">IP Server</label>
+                            <div class="relative transition-all duration-300 group-focus-within:-translate-y-1">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i data-lucide="server" class="w-5 h-5 text-slate-400 group-focus-within:text-brand-violet transition-colors"></i>
+                                </div>
+                                <input type="text" id="ipInput" value="192.168.10.1" 
+                                    class="block w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-black/20 border border-transparent focus:border-brand-violet/30 focus:bg-white dark:focus:bg-black/40 rounded-xl outline-none transition-all font-mono text-sm md:text-base font-medium placeholder-slate-400 dark:text-white" placeholder="192.168.x.x">
                             </div>
                         </div>
                     </div>
-                    <button onclick="generateAll()" class="w-full md:w-auto px-10 py-4 premium-gradient text-white rounded-2xl font-black shadow-xl shadow-brand-debian/30 btn-interact transition-all flex items-center justify-center gap-3 min-w-[200px]">
-                        <i data-lucide="wand-2" class="w-6 h-6"></i> GENERATE SCRIPT
+                    
+                    <button onclick="generateAll()" class="w-full py-4 rounded-xl gradient-bg text-white font-bold tracking-wide shadow-lg shadow-brand-debian/25 hover:shadow-brand-debian/40 active:scale-[0.99] transition-all duration-300 flex items-center justify-center gap-2 group">
+                        <i data-lucide="sparkles" class="w-5 h-5 group-hover:rotate-12 transition-transform"></i>
+                        GENERATE CONFIG
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Output Sections -->
-        <div id="resultsContainer" class="hidden grid lg:grid-cols-2 gap-8">
+        <!-- Output Grid -->
+        <div id="resultsContainer" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
             
-            <!-- Step 1 Card -->
-            <div class="space-y-4" data-aos="fade-right">
-                <div class="flex items-center justify-between px-2">
-                    <div class="flex items-center gap-3">
-                        <span class="w-8 h-8 rounded-lg premium-gradient flex items-center justify-center text-white font-black text-sm shadow-md">1</span>
-                        <h3 class="font-bold uppercase tracking-widest text-xs text-slate-500">Update & Repositori</h3>
-                    </div>
-                    <button onclick="copyCode('output1', 'copyBtn1')" id="copyBtn1" class="text-[10px] font-black text-brand-debian hover:text-brand-violet transition-colors flex items-center gap-1 uppercase tracking-tighter">
-                        <i data-lucide="copy" class="w-3 h-3"></i> Salin Kode
+            <!-- Card 1 -->
+            <div class="flex flex-col gap-3" data-aos="fade-up" data-aos-delay="0">
+                <div class="flex items-center justify-between px-1">
+                    <span class="text-xs font-bold uppercase tracking-widest text-emerald-500">01. Repository</span>
+                    <button onclick="copyCode('output1', 'btn1')" id="btn1" class="text-xs hover:text-white transition-colors opacity-60 hover:opacity-100 flex items-center gap-1">
+                        <i data-lucide="copy" class="w-3 h-3"></i> Copy
                     </button>
                 </div>
-                <div class="glass p-1 rounded-[2rem] shadow-xl">
-                    <textarea id="output1" readonly class="w-full h-[450px] p-6 code-screen text-emerald-400 font-mono text-xs leading-relaxed outline-none resize-none no-scrollbar"></textarea>
+                <!-- Terminal Window -->
+                <div class="terminal-window rounded-xl overflow-hidden flex flex-col h-[500px]">
+                    <div class="bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                        <div class="ml-2 text-[10px] text-slate-500 font-mono">sources.list</div>
+                    </div>
+                    <textarea id="output1" readonly class="flex-grow w-full bg-transparent p-4 font-mono text-[11px] leading-relaxed text-emerald-400 resize-none outline-none focus:bg-white/5 transition-colors custom-scrollbar"></textarea>
                 </div>
             </div>
 
-            <!-- Step 2 Card -->
-            <div class="space-y-4" data-aos="fade-left">
-                <div class="flex items-center justify-between px-2">
-                    <div class="flex items-center gap-3">
-                        <span class="w-8 h-8 rounded-lg bg-slate-800 dark:bg-slate-700 flex items-center justify-center text-white font-black text-sm shadow-md border border-white/10">2</span>
-                        <h3 class="font-bold uppercase tracking-widest text-xs text-slate-500">Konfigurasi DNS Bind9</h3>
-                    </div>
-                    <button onclick="copyCode('output2', 'copyBtn2')" id="copyBtn2" class="text-[10px] font-black text-blue-500 hover:text-blue-400 transition-colors flex items-center gap-1 uppercase tracking-tighter">
-                        <i data-lucide="copy" class="w-3 h-3"></i> Salin Kode
+            <!-- Card 2 -->
+            <div class="flex flex-col gap-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex items-center justify-between px-1">
+                    <span class="text-xs font-bold uppercase tracking-widest text-orange-400">02. Install</span>
+                    <button onclick="copyCode('output2', 'btn2')" id="btn2" class="text-xs hover:text-white transition-colors opacity-60 hover:opacity-100 flex items-center gap-1">
+                        <i data-lucide="copy" class="w-3 h-3"></i> Copy
                     </button>
                 </div>
-                <div class="glass p-1 rounded-[2rem] shadow-xl">
-                    <textarea id="output2" readonly class="w-full h-[450px] p-6 code-screen text-blue-300 font-mono text-xs leading-relaxed outline-none resize-none no-scrollbar"></textarea>
+                <div class="terminal-window rounded-xl overflow-hidden flex flex-col h-[500px]">
+                    <div class="bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                        <div class="ml-2 text-[10px] text-slate-500 font-mono">apt-get</div>
+                    </div>
+                    <textarea id="output2" readonly class="flex-grow w-full bg-transparent p-4 font-mono text-[11px] leading-relaxed text-orange-300 resize-none outline-none focus:bg-white/5 transition-colors custom-scrollbar"></textarea>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="flex flex-col gap-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex items-center justify-between px-1">
+                    <span class="text-xs font-bold uppercase tracking-widest text-brand-violet">03. Configuration</span>
+                    <button onclick="copyCode('output3', 'btn3')" id="btn3" class="text-xs hover:text-white transition-colors opacity-60 hover:opacity-100 flex items-center gap-1">
+                        <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                    </button>
+                </div>
+                <div class="terminal-window rounded-xl overflow-hidden flex flex-col h-[500px]">
+                    <div class="bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                        <div class="ml-2 text-[10px] text-slate-500 font-mono">named.conf</div>
+                    </div>
+                    <textarea id="output3" readonly class="flex-grow w-full bg-transparent p-4 font-mono text-[11px] leading-relaxed text-blue-300 resize-none outline-none focus:bg-white/5 transition-colors custom-scrollbar"></textarea>
                 </div>
             </div>
 
         </div>
 
-        <!-- Initial Placeholder -->
-        <div id="placeholder" class="py-20 text-center" data-aos="zoom-in">
-            <div class="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                <i data-lucide="code-2" class="w-10 h-10 text-slate-400"></i>
+        <!-- Empty State -->
+        <div id="placeholder" class="py-24 text-center" data-aos="zoom-in">
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-slate-100 dark:bg-white/5 mb-6 ring-1 ring-slate-200 dark:ring-white/10">
+                <i data-lucide="command" class="w-10 h-10 text-slate-300 dark:text-slate-600"></i>
             </div>
-            <h3 class="text-xl font-bold text-slate-400">Masukkan parameter di atas untuk memulai</h3>
-            <p class="text-slate-500 text-sm mt-2 max-w-md mx-auto italic">Skrip akan otomatis menyesuaikan zone reverse DNS berdasarkan oktet IP Address Anda.</p>
+            <p class="text-slate-400 text-sm font-medium tracking-wide uppercase">Menunggu Input Parameter</p>
         </div>
 
     </main>
 
-    <footer class="mt-auto py-12 px-4 border-t border-slate-200 dark:border-slate-800">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 opacity-60">
-            <div class="flex items-center gap-2">
-                <div class="w-6 h-6 premium-gradient rounded flex items-center justify-center text-[10px] text-white font-black shadow-sm italic">D</div>
-                <span class="text-[10px] font-black uppercase tracking-[0.4em]">© 2024 Deni.Net Studio</span>
-            </div>
-            <div class="flex gap-6 text-[10px] font-black uppercase tracking-[0.2em]">
-                <a href="#" class="hover:text-brand-debian">Dokumentasi</a>
-                <a href="#" class="hover:text-brand-debian">Server Guide</a>
-            </div>
-        </div>
+    <footer class="mt-auto py-8 text-center border-t border-slate-200 dark:border-white/5">
+        <p class="text-slate-400 dark:text-slate-600 text-xs font-medium tracking-widest uppercase">
+            &copy; 2024 Deni.Net Studio <span class="mx-2 text-slate-300 dark:text-slate-700">|</span> Built for Debian
+        </p>
     </footer>
 
     <script>
         lucide.createIcons();
-        AOS.init({ duration: 800, once: true });
+        AOS.init({ duration: 600, once: true, offset: 50 });
 
         function generateAll() {
             const domain = document.getElementById('domainInput').value.trim() || 'contoh.local';
@@ -186,13 +263,14 @@
             
             const ipParts = ip.split('.');
             if(ipParts.length !== 4) {
-                alert("Format IP tidak valid!");
+                alert("Format IP tidak valid! Harap gunakan format x.x.x.x");
                 return;
             }
             const lastOctet = ipParts[3];
             const reverseZoneBase = `${ipParts[2]}.${ipParts[1]}.${ipParts[0]}`;
 
-            const script1 = `# --- STEP 1: REPOSITORY & UPDATE ---
+            // --- STEP 1: Repo & Update ---
+            const script1 = `# --- 1. REPOSITORY & UPDATE ---
 cat <<EOF > /etc/apt/sources.list
 deb http://deb.debian.org/debian bullseye main contrib non-free
 deb-src http://deb.debian.org/debian bullseye main contrib non-free
@@ -204,15 +282,24 @@ deb http://deb.debian.org/debian bullseye-updates main contrib non-free
 deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free
 EOF
 
-apt update && apt upgrade -y
-apt install bind9 dnsutils -y`;
+# Update paket sistem
+apt update && apt upgrade -y`;
 
-            // STEP 2 CONTENT
-            const script2 = `
+            // --- STEP 2: Install Packages ---
+            const script2 = `# --- 2. INSTALL PACKAGES ---
+# Menginstall Bind9 dan DNSUtils
+apt install bind9 dnsutils -y
+`;
+
+            // --- STEP 3: Config DNS ---
+            const script3 = `# --- 3. BIND9 CONFIGURATION ---
 cd /etc/bind
+
+# Membuat salinan file konfigurasi
 cp db.127 db.reverse
 cp db.local db.forward
 
+# Konfigurasi Forward Zone
 cat <<EOF > /etc/bind/db.forward
 ; BIND data file for ${domain}
 \\$TTL    604800
@@ -228,6 +315,7 @@ cat <<EOF > /etc/bind/db.forward
 www     IN      A       ${ip}
 EOF
 
+# Konfigurasi Reverse Zone
 cat <<EOF > /etc/bind/db.reverse
 ; BIND reverse data file for ${domain}
 \\$TTL    604800
@@ -242,6 +330,7 @@ cat <<EOF > /etc/bind/db.reverse
 ${lastOctet}       IN      PTR     ${domain}.
 EOF
 
+# Mendaftarkan Zone
 cat <<EOF >> /etc/bind/named.conf.default-zones
 
 zone "${domain}" {
@@ -255,21 +344,35 @@ zone "${reverseZoneBase}.in-addr.arpa" {
 };
 EOF
 
+# Set DNS Resolver
 echo "nameserver ${ip}" > /etc/resolv.conf
 
+# Restart Service
 systemctl restart bind9
-echo "--- Verifikasi ---"
+
+# Verifikasi
+echo "--- Testing DNS ---"
 nslookup ${domain}
 nslookup www.${domain}`;
 
+            // Inject content
             document.getElementById('output1').value = script1;
             document.getElementById('output2').value = script2;
+            document.getElementById('output3').value = script3;
             
-            document.getElementById('placeholder').classList.add('hidden');
-            document.getElementById('resultsContainer').classList.remove('hidden');
-            
-            // Re-animate
-            AOS.refresh();
+            // Show results
+            const placeholder = document.getElementById('placeholder');
+            const results = document.getElementById('resultsContainer');
+
+            if (!results.classList.contains('hidden')) {
+                // If already showing, just flash the code
+                results.classList.add('opacity-50');
+                setTimeout(() => results.classList.remove('opacity-50'), 200);
+            } else {
+                placeholder.classList.add('hidden');
+                results.classList.remove('hidden');
+                AOS.refresh(); 
+            }
         }
 
         function copyCode(targetId, btnId) {
@@ -280,14 +383,13 @@ nslookup www.${domain}`;
             document.execCommand('copy');
             
             const btn = document.getElementById(btnId);
-            const original = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="check" class="w-3 h-3"></i> TERSALIN!`;
-            btn.classList.add('text-emerald-500');
+            const originalIcon = btn.innerHTML;
+            
+            btn.innerHTML = `<i data-lucide="check-circle" class="w-3 h-3 text-emerald-400"></i> <span class="text-emerald-400">Copied</span>`;
             lucide.createIcons();
             
             setTimeout(() => {
-                btn.innerHTML = original;
-                btn.classList.remove('text-emerald-500');
+                btn.innerHTML = `<i data-lucide="copy" class="w-3 h-3"></i> Copy`;
                 lucide.createIcons();
             }, 2000);
         }
