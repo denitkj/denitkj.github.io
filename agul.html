@@ -1,0 +1,1328 @@
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agung Deni Prayogo | Portfolio Personal Pro</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="icon.png">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            purple: '#7c3aed',
+                            blue: '#2563eb',
+                            deep: '#1e1b4b',
+                        },
+                        accent: {
+                            violet: '#8b5cf6',
+                            cyan: '#06b6d4'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        heading: ['Space Grotesk', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .premium-gradient {
+            background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #a78bfa, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glow-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.15;
+        }
+        .floating {
+            animation: floating 4s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        .card-3d {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card-3d:hover {
+            transform: translateY(-12px) scale(1.02);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .marquee {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+            gap: 2rem;
+        }
+        .marquee-content {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-around;
+            min-width: 100%;
+            gap: 2rem;
+            animation: scroll 20s linear infinite;
+        }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+        section {
+            overflow: hidden;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .cert-card {
+            flex: 0 0 300px;
+        }
+        @media (min-width: 768px) {
+            .cert-card {
+                flex: 0 0 400px;
+            }
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        #mobile-menu {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: top;
+        }
+        .menu-open {
+            transform: scaleY(1);
+            opacity: 1;
+        }
+        .menu-closed {
+            transform: scaleY(0);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .project-card {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    transition: all 0.45s ease;
+}
+
+.project-card.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 8px;
+    text-transform: uppercase;
+}
+
+.title {
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin: 14px 0 10px;
+}
+
+.desc {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-900 dark:bg-[#020617] dark:text-white transition-colors duration-500 font-sans overflow-x-hidden">
+
+<!-- Ambient Background Elements -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+    <div class="glow-circle w-[500px] h-[500px] bg-brand-purple top-[-100px] left-[-100px]"></div>
+    <div class="glow-circle w-[400px] h-[400px] bg-brand-blue bottom-[-50px] right-[-50px]"></div>
+</div>
+
+<!-- Progress Notification -->
+<div id="progress-toast" class="fixed bottom-6 right-6 z-[100] glass px-5 py-4 rounded-2xl shadow-2xl flex items-center gap-4 animate-bounce border-l-4 border-brand-purple">
+    <div class="flex flex-col">
+        <span class="text-[10px] uppercase tracking-widest text-brand-purple font-bold">System Status</span>
+        <p class="text-sm font-semibold">⚠️ Konten belum sempurna 45%</p>
+    </div>
+    <button onclick="document.getElementById('progress-toast').remove()" class="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition-colors">
+        <i data-lucide="x" class="w-4 h-4 text-slate-400"></i>
+    </button>
+</div>
+
+<!-- Navigation -->
+<nav id="navbar" class="fixed top-0 w-full z-[100] transition-all duration-500 py-6 px-4 md:px-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="glass-nav rounded-3xl px-6 py-3 flex justify-between items-center shadow-2xl overflow-hidden">
+            
+            <!-- Logo -->
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <div class="w-11 h-11 premium-gradient rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:rotate-12 transition-transform duration-300">
+                    <i data-lucide="zap" class="w-6 h-6 fill-current"></i>
+                </div>
+                <span class="text-2xl font-black font-heading tracking-tighter dark:text-white">DENI<span class="text-brand-purple">.</span></span>
+            </div>
+
+            <!-- MENU DESKTOP -->
+            <div class="hidden lg:flex items-center gap-10">
+                <div class="flex gap-8 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-300">
+                    <a href="#home" class="hover:text-brand-purple transition-colors relative group">
+                        Beranda
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-purple transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#about" class="hover:text-brand-purple transition-colors relative group">
+                        Tentang
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-purple transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#projects" class="hover:text-brand-purple transition-colors relative group">
+                        Proyek
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-purple transition-all group-hover:w-full"></span>
+                    </a>
+                </div>
+                
+                <!-- RIGHT SIDE DESKTOP -->
+                <div class="flex items-center gap-4 pl-6 border-l border-slate-200 dark:border-slate-700">
+
+                    <!-- USER ICON DESKTOP -->
+                    <a href="user.html" id="user-menu-desktop"
+                       class="p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-700 dark:text-white">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </a>
+
+                    <!-- THEME TOGGLE -->
+                    <button id="theme-toggle" class="p-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors dark:text-white">
+                        <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                        <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                    </button>
+
+                    <!-- CONTACT BUTTON -->
+                    <a href="#contact" class="px-6 py-2.5 premium-gradient text-white text-sm font-bold rounded-xl shadow-lg hover:scale-105 transition-transform">
+                        Kontak
+                    </a>
+                </div>
+            </div>
+
+            <!-- MOBILE MENU -->
+            <div class="flex lg:hidden items-center gap-2">
+
+                <!-- USER ICON MOBILE -->
+                <a href="user.html" id="user-menu-mobile"
+                   class="p-2.5 text-gray-700 dark:text-white inline-flex items-center">
+                    <i data-lucide="user" class="w-6 h-6"></i>
+                </a>
+
+                <button id="theme-toggle-mobile" class="p-2.5 dark:text-white">
+                    <i data-lucide="moon" class="w-6 h-6 dark:hidden"></i>
+                    <i data-lucide="sun" class="w-6 h-6 hidden dark:block"></i>
+                </button>
+
+                <button id="mobile-menu-btn" class="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl dark:text-white">
+                    <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- DROPDOWN MOBILE MENU -->
+        <div id="mobile-menu" class="menu-closed absolute top-[90px] left-4 right-4 glass-nav rounded-[2rem] p-8 shadow-2xl lg:hidden">
+            <div class="flex flex-col gap-6 text-center">
+                <a href="#home" class="text-xl font-bold dark:text-white">Beranda</a>
+                <a href="#about" class="text-xl font-bold dark:text-white">Tentang</a>
+                <a href="#projects" class="text-xl font-bold dark:text-white">Proyek</a>
+                <a href="#contact" class="mt-4 px-8 py-4 premium-gradient text-white font-bold rounded-2xl shadow-xl">
+                    Hubungi Saya
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen pt-40 pb-20 px-6 flex items-center">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+            <div data-aos="fade-up">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-purple opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-purple"></span>
+                    </span>
+                    <span class="text-xs font-bold uppercase tracking-[0.2em]">Tersedia untuk Pembelajaran</span>
+                </div>
+                <h1 class="text-5xl lg:text-8xl font-black font-heading leading-none mb-6">
+                    Membangun <br> <span class="text-gradient">Masa Depan</span> <br> Digital.
+                </h1>
+                <p class="text-xl text-slate-500 dark:text-slate-400 mb-10 max-w-xl leading-relaxed">
+                    Saya <span class="font-bold text-slate-900 dark:text-white">Agung Deni Prayogo</span>, spesialis infrastruktur jaringan & pengembang web yang fokus pada performa dan keamanan.
+                </p>
+                <div class="flex flex-wrap gap-5">
+                    <a href="#projects" class="px-10 py-5 premium-gradient text-white font-black rounded-2xl shadow-2xl shadow-brand-purple/40 hover:scale-105 active:scale-95 transition-all">Lihat Karya</a>
+                    <a href="#contact" class="px-10 py-5 glass font-black rounded-2xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border-white/10">Hubungi Saya</a>
+                </div>
+            </div>
+
+            <div class="relative" data-aos="zoom-in" data-aos-delay="200">
+                <div class="relative w-full aspect-square max-w-lg mx-auto">
+                    <div class="absolute inset-0 border-[1px] border-dashed border-brand-purple/30 rounded-full animate-[spin_20s_linear_infinite]"></div>
+                    <div class="absolute inset-10 border-[1px] border-dashed border-brand-blue/30 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+                    
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-[85%] h-[85%] rounded-[40px] premium-gradient p-1 rotate-6 floating">
+                            <div class="w-full h-full rounded-[38px] bg-slate-950 overflow-hidden relative group">
+                                <img src="https://denitkj.github.io/deni/portofolio/gw.png" alt="Deni" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-brand-deep to-transparent opacity-60"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="absolute top-10 right-0 glass px-4 py-3 rounded-2xl shadow-xl floating">
+                        <i data-lucide="shield-check" class="text-accent-cyan w-6 h-6"></i>
+                    </div>
+                    <div class="absolute bottom-20 left-0 glass px-4 py-3 rounded-2xl shadow-xl floating" style="animation-delay: 1.5s">
+                        <i data-lucide="cpu" class="text-brand-purple w-6 h-6"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- High-Impact Stats -->
+    <section class="py-20 px-6">
+        <div class="max-w-7xl mx-auto glass p-12 rounded-[40px]">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-12">
+                <div class="text-center">
+                    <h3 class="text-5xl font-black font-heading mb-2">12+</h3>
+                    <p class="text-sm font-bold uppercase tracking-widest text-slate-500">Proyek Sukses</p>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-5xl font-black font-heading mb-2">03+</h3>
+                    <p class="text-sm font-bold uppercase tracking-widest text-slate-500">Sertifikasi</p>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-5xl font-black font-heading mb-2">02+</h3>
+                    <p class="text-sm font-bold uppercase tracking-widest text-slate-500">Networking & Computer Education</p>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-5xl font-black font-heading mb-2">02+</h3>
+                    <p class="text-sm font-bold uppercase tracking-widest text-slate-500">
+                        Networking & Computer Training
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-32 px-6 bg-[#050E3C] text-white overflow-hidden relative">
+        <div class="glow-circle w-[600px] h-[600px] bg-brand-purple top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"></div>
+        <div class="max-w-7xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-24 items-center">
+                <div class="space-y-8" data-aos="fade-right">
+                    <h2 class="text-4xl lg:text-6xl font-black font-heading">Filosofi & <br> <span class="text-gradient">Visi Kerja.</span></h2>
+                    <p class="text-xl text-slate-400 leading-relaxed">
+                        Sebagai lulusan TKJ, saya tidak hanya melihat kabel dan kode; saya melihat konektivitas yang memberdayakan manusia. Fokus utama saya adalah efisiensi operasional dan desain sistem yang tahan masa depan.
+                    </p>
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div class="glass p-6 rounded-2xl border-white/5">
+                            <i data-lucide="check-circle-2" class="text-brand-purple mb-4"></i>
+                            <h4 class="font-bold mb-2 text-lg">Integritas Jaringan</h4>
+                            <p class="text-sm text-slate-500">Menjamin uptime maksimal dan keamanan data pada setiap konfigurasi.</p>
+                        </div>
+                        <div class="glass p-6 rounded-2xl border-white/5">
+                            <i data-lucide="code-2" class="text-brand-blue mb-4"></i>
+                            <h4 class="font-bold mb-2 text-lg">Efisiensi Kode</h4>
+                            <p class="text-sm text-slate-500">Menulis skrip yang bersih, terdokumentasi, dan mudah dikelola.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative" data-aos="fade-left">
+                    <div class="glass p-8 rounded-[40px] relative overflow-hidden group">
+                        <div class="absolute inset-0 premium-gradient opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                        <div class="flex flex-col gap-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-2xl premium-gradient flex items-center justify-center text-white"><i data-lucide="graduation-cap"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-xl">Latar Belakang</h4>
+                                    <p class="text-slate-500">SMKS PGRI WLINGI</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-2xl glass flex items-center justify-center text-white border-white/10"><i data-lucide="heart" class="text-red-500"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-xl">Passion</h4>
+                                    <p class="text-slate-500">Networking & Server Management</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-2xl glass flex items-center justify-center text-white border-white/10"><i data-lucide="trophy" class="text-yellow-500"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-xl">Prestasi</h4>
+                                    <p class="text-slate-500">Debian Training – ATSWA</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills (Animated Bars) -->
+    <section id="skills" class="py-32 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <span class="text-brand-purple font-black tracking-[0.3em] uppercase text-xs mb-4 block">Abilities</span>
+                <h2 class="text-4xl lg:text-6xl font-black font-heading">Kekuatan Teknis</h2>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-20">
+                <div class="space-y-10">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 rounded-xl premium-gradient flex items-center justify-center text-white shadow-xl shadow-brand-purple/20">
+                            <i data-lucide="network"></i>
+                        </div>
+                        <h3 class="text-2xl font-black">Network Engineering</h3>
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <div class="flex justify-between mb-3">
+                                <span class="font-bold">Mikrotik Architecture</span>
+                                <span class="text-brand-purple font-black">92%</span>
+                            </div>
+                            <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full premium-gradient rounded-full w-[92%]" data-aos="slide-right" data-aos-duration="1500"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-3">
+                                <span class="font-bold">Cisco Interconnectivity</span>
+                                <span class="text-brand-purple font-black">85%</span>
+                            </div>
+                            <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full premium-gradient rounded-full w-[85%]" data-aos="slide-right" data-aos-duration="1500" data-aos-delay="200"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-10">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-900 dark:text-white">
+                            <i data-lucide="code"></i>
+                        </div>
+                        <h3 class="text-2xl font-black">Software Development</h3>
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <div class="flex justify-between mb-3">
+                                <span class="font-bold">Modern Web (Tailwind/React)</span>
+                                <span class="text-brand-blue font-black">80%</span>
+                            </div>
+                            <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-brand-blue rounded-full w-[80%]" data-aos="slide-right" data-aos-duration="1500"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-3">
+                                <span class="font-bold">Backend Ops (Linux/Node)</span>
+                                <span class="text-brand-blue font-black">75%</span>
+                            </div>
+                            <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-brand-blue rounded-full w-[75%]" data-aos="slide-right" data-aos-duration="1500" data-aos-delay="200"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+<section id="projects" class="py-32 px-6 bg-[#f1f5f9] dark:bg-[#050b21]">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- Header & Filter -->
+        <div class="flex flex-col lg:flex-row justify-between items-end mb-20 gap-8">
+            <div>
+                <span class="text-brand-purple font-black tracking-[0.3em] uppercase text-xs mb-4 block">
+                    Portfolio
+                </span>
+                <h2 class="text-4xl lg:text-6xl font-black font-heading">
+                    Karya Terpilih
+                </h2>
+            </div>
+
+            <div class="flex gap-4">
+                <button class="filter-btn px-8 py-3 rounded-xl premium-gradient text-white font-bold"
+                        data-filter="all">Semua</button>
+                <button class="filter-btn px-8 py-3 rounded-xl glass font-bold"
+                        data-filter="network">Network</button>
+                <button class="filter-btn px-8 py-3 rounded-xl glass font-bold"
+                        data-filter="web">Web</button>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+<div class="grid lg:grid-cols-3 gap-10">
+
+    <!-- NETWORK -->
+    <div class="project-card card-3d bg-white dark:bg-slate-900 rounded-[32px] shadow-2xl"
+         data-category="network">
+        <img class="h-64 w-full object-cover rounded-t-[32px]"
+             src="karya1.png">
+        <div class="p-8">
+            <span class="badge bg-brand-purple/10 text-brand-purple">Network</span>
+            <h4 class="title">Server Virtualization</h4>
+            <p class="desc">
+                Implementation of Proxmox VE to improve server efficiency, scalability, and resource management.
+            </p>
+        </div>
+    </div>
+
+    <!-- WEB 1 -->
+    <div class="project-card card-3d bg-white dark:bg-slate-900 rounded-[32px] shadow-2xl"
+         data-category="web">
+        <img class="h-64 w-full object-cover rounded-t-[32px]"
+             src="karya2.png">
+        <div class="p-8">
+            <span class="badge bg-brand-blue/10 text-brand-blue">Web</span>
+            <h4 class="title">Online Learning Website</h4>
+            <p class="desc">
+                Development of an interactive learning website for educational content and digital materials.
+            </p>
+        </div>
+    </div>
+
+    <!-- WEB 2 -->
+    <div class="project-card card-3d bg-white dark:bg-slate-900 rounded-[32px] shadow-2xl"
+         data-category="web">
+        <img class="h-64 w-full object-cover rounded-t-[32px]"
+             src="karya3.png">
+        <div class="p-8">
+            <span class="badge bg-brand-blue/10 text-brand-blue">Web</span>
+            <h4 class="title">Personal Portfolio Website</h4>
+            <p class="desc">
+                A personal portfolio website showcasing skills, projects, and professional experience.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+    </div>
+
+
+</section>
+
+    <!-- Professional Timeline -->
+<section class="py-32 px-6">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-4xl font-black font-heading text-center mb-20">
+      Perjalanan Karir
+    </h2>
+
+    <div class="space-y-12">
+
+      <!-- SMK -->
+      <div class="relative pl-12 border-l-4 border-slate-200 dark:border-slate-800 group" data-aos="fade-up">
+        <div class="absolute -left-[14px] top-0 w-6 h-6 rounded-full glass border-4 border-brand-purple group-hover:bg-brand-purple transition-all shadow-xl shadow-brand-purple/20"></div>
+
+        <div class="glass p-8 rounded-3xl group-hover:translate-x-4 transition-transform border-white/5">
+          <span class="text-brand-purple font-black text-sm">
+            2023 - Sekarang
+          </span>
+
+          <h4 class="text-2xl font-black mt-2">
+            Siswa SMKS PGRI Wlingi – TKJ
+          </h4>
+
+          <p class="text-slate-500 mt-2 mb-4">
+            Menempuh pendidikan di jurusan Teknik Komputer dan Jaringan (TKJ) dengan fokus pada instalasi, konfigurasi, dan troubleshooting jaringan komputer.
+          </p>
+        </div>
+      </div>
+
+      <!-- PKL -->
+      <div class="relative pl-12 border-l-4 border-slate-200 dark:border-slate-800 group"
+           data-aos="fade-up"
+           data-aos-delay="100">
+
+        <div class="absolute -left-[14px] top-0 w-6 h-6 rounded-full glass border-4 border-brand-blue group-hover:bg-brand-blue transition-all shadow-xl shadow-brand-blue/20"></div>
+
+        <div class="glass p-8 rounded-3xl group-hover:translate-x-4 transition-transform border-white/5">
+          <span class="text-brand-blue font-black text-sm">
+            2024 - 2025
+          </span>
+
+          <h4 class="text-2xl font-black mt-2">
+            PKL – CV. Active Komputer
+          </h4>
+
+          <p class="text-slate-500 mt-2">
+            Melaksanakan Praktik Kerja Lapangan (PKL) dengan terlibat langsung dalam instalasi jaringan, perawatan perangkat komputer, serta dukungan teknis untuk kebutuhan klien.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+    <!-- Tools Section (Marquee & Grid) -->
+<section id="tools" class="py-24 px-6 bg-slate-50 dark:bg-slate-900/50">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span class="text-brand-purple font-black tracking-[0.3em] uppercase text-xs mb-4 block">
+        Ecosystem
+      </span>
+      <h2 class="text-4xl font-black font-heading italic">
+        Tools yang Saya Gunakan
+      </h2>
+    </div>
+
+    <!-- MARQUEE -->
+    <div class="marquee mb-16">
+      <div class="marquee-content">
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="router" class="text-brand-purple"></i>
+          <span class="font-bold">Mikrotik Winbox</span>
+        </div>
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="code-2" class="text-brand-blue"></i>
+          <span class="font-bold">VS Code</span>
+        </div>
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="network" class="text-orange-500"></i>
+          <span class="font-bold">Cisco Packet Tracer</span>
+        </div>
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="shield-check" class="text-pink-500"></i>
+          <span class="font-bold">Edrawmax</span>
+        </div>
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="terminal-square" class="text-green-500"></i>
+          <span class="font-bold">Putty</span>
+        </div>
+
+      </div>
+
+      <!-- DUPLIKAT -->
+      <div class="marquee-content">
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="router" class="text-brand-purple"></i>
+          <span class="font-bold">Mikrotik Winbox</span>
+        </div>
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="code-2" class="text-brand-blue"></i>
+          <span class="font-bold">VS Code</span>
+        </div>
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="network" class="text-orange-500"></i>
+          <span class="font-bold">Cisco Packet Tracer</span>
+        </div>
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="shield-check" class="text-pink-500"></i>
+          <span class="font-bold">Edrawmax</span>
+        </div>
+
+        <div class="flex items-center gap-3 glass px-6 py-4 rounded-2xl">
+          <i data-lucide="terminal-square" class="text-green-500"></i>
+          <span class="font-bold">Putty</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6" data-aos="fade-up">
+
+<!-- Debian -->
+<a href="debian.html" class="group">
+  <div class="glass p-6 rounded-3xl text-center hover:border-brand-purple transition-all cursor-pointer">
+    <div class="w-12 h-12 mx-auto mb-4 glass border-white/10 rounded-xl flex items-center justify-center text-brand-purple group-hover:rotate-12 transition-transform">
+      <i data-lucide="code"></i>
+    </div>
+    <h4 class="font-bold text-sm">Debian</h4>
+  </div>
+</a>
+
+
+  <!-- Mikrotik -->
+  <a href="ip.html" class="group">
+    <div class="glass p-6 rounded-3xl text-center hover:border-brand-purple transition-all cursor-pointer">
+      <div class="w-12 h-12 mx-auto mb-4 glass border-white/10 rounded-xl flex items-center justify-center text-brand-blue group-hover:rotate-12 transition-transform">
+        <i data-lucide="router"></i>
+      </div>
+      <h4 class="font-bold text-sm">Mikrotik</h4>
+    </div>
+  </a>
+
+
+  <!-- Encryption -->
+  <a href="enkripsi.html" class="group">
+    <div class="glass p-6 rounded-3xl text-center hover:border-brand-purple transition-all cursor-pointer">
+      <div class="w-12 h-12 mx-auto mb-4 glass border-white/10 rounded-xl flex items-center justify-center text-blue-400 group-hover:rotate-12 transition-transform">
+        <i data-lucide="lock"></i>
+      </div>
+      <h4 class="font-bold text-sm">Encryption</h4>
+    </div>
+  </a>
+
+  <!-- Referensi -->
+  <a href="download.html" class="group">
+    <div class="glass p-6 rounded-3xl text-center hover:border-brand-purple transition-all cursor-pointer">
+      <div class="w-12 h-12 mx-auto mb-4 glass border-white/10 rounded-xl flex items-center justify-center text-green-500 group-hover:rotate-12 transition-transform">
+        <i data-lucide="book-open"></i>
+      </div>
+      <h4 class="font-bold text-sm">Referensi</h4>
+    </div>
+  </a>
+
+<!-- DNS Otomatis -->
+<a href="dns.html" class="group">
+  <div class="glass p-6 rounded-3xl text-center hover:border-brand-purple transition-all cursor-pointer">
+    <div class="w-12 h-12 mx-auto mb-4 glass border-white/10 rounded-xl flex items-center justify-center text-purple-400 group-hover:rotate-12 transition-transform">
+      <i data-lucide="globe"></i>
+    </div>
+    <h4 class="font-bold text-sm">DNS Otomatis</h4>
+  </div>
+</a>
+ 
+<a href="apache.html" class="group">
+  <div class="glass p-6 rounded-3xl text-center hover:border-brand-purple transition-all cursor-pointer">
+    <div class="w-12 h-12 mx-auto mb-4 glass border-white/10 rounded-xl flex items-center justify-center text-red-500 group-hover:rotate-12 transition-transform">
+      <i data-lucide="server"></i>
+    </div>
+    <h4 class="font-bold text-sm">Apache2 Server</h4>
+  </div>
+</a>
+
+
+</div>
+
+  </div>
+</section>
+
+
+    <!-- Certificates Section -->
+<section id="certifications" class="py-24 px-6 overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-end mb-12">
+      <div>
+        <h2 class="text-3xl md:text-5xl font-black font-heading mb-4">
+          Certifications & Experience
+        </h2>
+        <p class="text-slate-500">
+          Klik pada sertifikat untuk melihat detail dan bagian-bagian dokumen.
+        </p>
+      </div>
+
+      <div class="hidden md:flex gap-4">
+        <button onclick="scrollCert(-1)" class="w-12 h-12 rounded-full glass flex items-center justify-center hover:premium-gradient hover:text-white transition-all">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <button onclick="scrollCert(1)" class="w-12 h-12 rounded-full glass flex items-center justify-center hover:premium-gradient hover:text-white transition-all">
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="cert-container" class="flex gap-6 overflow-x-auto hide-scrollbar scroll-smooth pb-8 snap-x snap-mandatory">
+
+      <div class="cert-card snap-center group cursor-pointer" 
+           onclick="openCertModal('Debian Linux Training – ATSWA', 'Sertifikat ini mencakup pelatihan administrasi server Linux, manajemen paket, dan keamanan sistem dasar.', 'TRAINING', 'bg-purple-500/10 text-purple-500', [
+              'servitikat/atswa1.png', 
+              'servitikat/atswa2.png', 
+              'servitikat/atswa3.jpg'
+           ])">
+        <div class="glass p-6 rounded-[32px] border-2 border-transparent group-hover:border-brand-purple transition-all duration-500 h-full">
+          <div class="aspect-video rounded-2xl bg-slate-800 mb-6 overflow-hidden relative">
+            <img src="servitikat/atswa1.png" alt="Debian Training" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-brand-purple/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span class="bg-white text-brand-purple px-4 py-2 rounded-xl font-bold text-sm shadow-xl">Lihat Detail</span>
+            </div>
+          </div>
+          <span class="px-4 py-1 rounded-full bg-purple-500/10 text-purple-500 text-xs font-bold uppercase tracking-widest">Training</span>
+          <h3 class="text-xl font-bold mt-4">Debian Linux Training – ATSWA</h3>
+          <p class="text-sm text-slate-500 mt-2">Linux server fundamentals and basic network administration.</p>
+        </div>
+      </div>
+
+      <div class="cert-card snap-center group cursor-pointer" 
+           onclick="openCertModal('Internship – CV. Active Komputer', 'Laporan praktik kerja lapangan yang berfokus pada perawatan komputer klien dan instalasi jaringan kantor.', 'INTERNSHIP', 'bg-blue-500/10 text-blue-500', [
+              'servitikat/pkl1.png', 
+              'servitikat/pkl2.png', 
+              'comingsoon.png'
+           ])">
+        <div class="glass p-6 rounded-[32px] border-2 border-transparent group-hover:border-brand-purple transition-all duration-500 h-full">
+          <div class="aspect-video rounded-2xl bg-slate-800 mb-6 overflow-hidden relative">
+            <img src="servitikat/pkl1.png" alt="PKL Active Computer" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-brand-purple/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <span class="bg-white text-brand-purple px-4 py-2 rounded-xl font-bold text-sm shadow-xl">Lihat Detail</span>
+            </div>
+          </div>
+          <span class="px-4 py-1 rounded-full bg-blue-500/10 text-blue-500 text-xs font-bold uppercase tracking-widest">Internship</span>
+          <h3 class="text-xl font-bold mt-4">Internship – CV. Active Komputer</h3>
+          <p class="text-sm text-slate-500 mt-2">Practical experience in computer maintenance and network installation.</p>
+        </div>
+      </div>
+
+<!-- LSP FIBER OPTIK -->
+        <div class="cert-card snap-center group cursor-pointer"
+     onclick="openCertModal(
+       'Sertifikat Attendance Jointer Fiber Optic',
+       'Sertifikat kehadiran pelatihan Jointer Fiber Optic yang membahas teknik penyambungan, perawatan, dan standar instalasi jaringan fiber optik.',
+       'ATTENDANCE',
+       'bg-blue-500/10 text-blue-500',
+       ['servitikat/Attendance Jointer Fiber Optic.png','foto-bersama.png','comingsoon.png']
+     )">
+  <div class="glass p-6 rounded-[32px] border-2 border-transparent group-hover:border-brand-purple transition-all duration-500 h-full">
+    <div class="aspect-video rounded-2xl bg-slate-800 mb-6 overflow-hidden relative">
+      <img src="servitikat/Attendance Jointer Fiber Optic.png" alt="Sertifikat Attendance Jointer Fiber Optic" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-brand-purple/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+        <span class="bg-white text-brand-purple px-4 py-2 rounded-xl font-bold text-sm shadow-xl">
+          Lihat Detail
+        </span>
+      </div>
+    </div>
+
+    <span class="px-4 py-1 rounded-full bg-blue-500/10 text-blue-500 text-xs font-bold uppercase tracking-widest">
+      Attendance
+    </span>
+
+    <h3 class="text-xl font-bold mt-4">
+      Sertifikat Attendance Jointer Fiber Optic
+    </h3>
+
+    <p class="text-sm text-slate-500 mt-2">
+      Sertifikat kehadiran pelatihan Jointer Fiber Optic meliputi teknik splicing, pengukuran, dan pemeliharaan jaringan FO.
+    </p>
+  </div>
+</div>
+
+        <div class="cert-card snap-center group cursor-pointer"
+     onclick="openCertModal(
+       'Sertifikat Kompeten Jointer Fiber Optic',
+       'Sertifikat kompetensi Jointer Fiber Optic yang menyatakan kemampuan dalam penyambungan, pengujian, dan pemeliharaan jaringan fiber optik sesuai standar kerja.',
+       'CERTIFICATION',
+       'bg-green-500/10 text-green-500',
+       ['comingsoon.png','comingsoon.png','comingsoon.png']
+     )">
+  <div class="glass p-6 rounded-[32px] border-2 border-transparent group-hover:border-brand-purple transition-all duration-500 h-full">
+    <div class="aspect-video rounded-2xl bg-slate-800 mb-6 overflow-hidden relative">
+      <img src="comingsoon.png" alt="Sertifikat Kompeten Jointer Fiber Optic" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-brand-purple/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+        <span class="bg-white text-brand-purple px-4 py-2 rounded-xl font-bold text-sm shadow-xl">
+          Lihat Detail
+        </span>
+      </div>
+    </div>
+
+    <span class="px-4 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase tracking-widest">
+      Certification
+    </span>
+
+    <h3 class="text-xl font-bold mt-4">
+      Sertifikat Kompeten Jointer Fiber Optic
+    </h3>
+
+    <p class="text-sm text-slate-500 mt-2">
+      Sertifikat kompetensi Jointer Fiber Optic untuk pekerjaan penyambungan, pengukuran, dan pemeliharaan jaringan fiber optik.
+    </p>
+  </div>
+</div>
+
+
+<!-- LSP JARINGAN -->
+<div class="cert-card snap-center group cursor-pointer"
+     onclick="openCertModal(
+       'LSP Jaringan',
+       'Sertifikasi kompetensi nasional BNSP pada skema Teknisi Jaringan.',
+       'CERTIFICATION',
+       'bg-green-500/10 text-green-500',
+       ['comingsoon.png','comingsoon.png','comingsoon.png']
+     )">
+  <div class="glass p-6 rounded-[32px] border-2 border-transparent group-hover:border-brand-purple transition-all duration-500 h-full">
+    <div class="aspect-video rounded-2xl bg-slate-800 mb-6 overflow-hidden relative">
+      <img src="comingsoon.png" alt="LSP Jaringan" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-brand-purple/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+        <span class="bg-white text-brand-purple px-4 py-2 rounded-xl font-bold text-sm shadow-xl">Lihat Detail</span>
+      </div>
+    </div>
+    <span class="px-4 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase tracking-widest">Certification</span>
+    <h3 class="text-xl font-bold mt-4">LSP Jaringan</h3>
+    <p class="text-sm text-slate-500 mt-2">Sertifikasi kompetensi administrasi dan manajemen jaringan komputer.</p>
+  </div>
+</div>
+
+<!-- LSP KOMPUTER -->
+<div class="cert-card snap-center group cursor-pointer"
+     onclick="openCertModal(
+       'LSP Komputer',
+       'Sertifikasi kompetensi nasional BNSP pada skema Teknisi Komputer.',
+       'CERTIFICATION',
+       'bg-green-500/10 text-green-500',
+       ['comingsoon.png','comingsoon.png','comingsoon.png']
+     )">
+  <div class="glass p-6 rounded-[32px] border-2 border-transparent group-hover:border-brand-purple transition-all duration-500 h-full">
+    <div class="aspect-video rounded-2xl bg-slate-800 mb-6 overflow-hidden relative">
+      <img src="comingsoon.png" alt="LSP Komputer" class="w-full h-full object-cover">
+      <div class="absolute inset-0 bg-brand-purple/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+        <span class="bg-white text-brand-purple px-4 py-2 rounded-xl font-bold text-sm shadow-xl">Lihat Detail</span>
+      </div>
+    </div>
+    <span class="px-4 py-1 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase tracking-widest">Certification</span>
+    <h3 class="text-xl font-bold mt-4">LSP Komputer</h3>
+    <p class="text-sm text-slate-500 mt-2">Sertifikasi teknisi perakitan, perawatan, dan troubleshooting komputer.</p>
+  </div>
+</div>
+
+    </div>
+  </div>
+</section>
+
+<div id="cert-modal" class="fixed inset-0 z-[120] hidden flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-xl">
+    <div class="max-w-5xl w-full bg-white dark:bg-slate-900 rounded-[40px] overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-300">
+        <button onclick="closeCertModal()" class="absolute top-6 right-6 z-10 p-3 bg-slate-100 dark:bg-white/10 hover:bg-brand-purple hover:text-white rounded-full transition-all">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <div class="grid lg:grid-cols-2">
+            <div class="p-8 bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center">
+                <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl bg-black flex items-center justify-center">
+                    <img id="modal-main-img" src="" class="max-w-full max-h-full object-contain transition-all duration-500">
+                </div>
+            </div>
+
+            <div class="p-8 lg:p-12">
+                <div id="modal-badge" class="inline-block px-4 py-1 rounded-full text-[10px] font-black uppercase mb-4"></div>
+                <h3 id="modal-title" class="text-3xl font-black font-heading mb-2 dark:text-white leading-tight"></h3>
+                <p id="modal-desc" class="text-slate-500 mb-8 leading-relaxed"></p>
+                
+                <h4 class="text-sm font-bold uppercase tracking-widest text-brand-purple mb-4 italic">Bagian Dokumen</h4>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="aspect-square rounded-2xl overflow-hidden border-2 border-transparent hover:border-brand-purple transition-all bg-slate-200 cursor-pointer">
+                        <img onclick="changePreview(this.src)" id="sub-img-1" src="" class="w-full h-full object-cover">
+                    </div>
+                    <div class="aspect-square rounded-2xl overflow-hidden border-2 border-transparent hover:border-brand-purple transition-all bg-slate-200 cursor-pointer">
+                        <img onclick="changePreview(this.src)" id="sub-img-2" src="" class="w-full h-full object-cover">
+                    </div>
+                    <div class="aspect-square rounded-2xl overflow-hidden border-2 border-transparent hover:border-brand-purple transition-all bg-slate-200 cursor-pointer">
+                        <img onclick="changePreview(this.src)" id="sub-img-3" src="" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Projects Section (Simplified) -->
+    <section class="py-32 px-6 bg-[#050E3C] text-white">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-black font-heading mb-16 text-center">Proyek Unggulan</h2>
+            <div class="grid lg:grid-cols-2 gap-10">
+                <div class="glass p-8 rounded-[40px] hover:border-brand-purple transition-all" data-aos="fade-right">
+                    <h4 class="text-brand-purple font-bold mb-2">#NetworkSolution</h4>
+                    <h3 class="text-3xl font-black mb-4">Hotspot Multi-VLAN Sekolah</h3>
+                    <p class="text-slate-400 mb-6">Membangun jaringan hotspot terpisah untuk Guru, Siswa, dan Tamu menggunakan MikroTik dengan sistem manajemen bandwidth terpusat.</p>
+                    <div class="flex gap-4"><span class="glass px-4 py-2 rounded-xl text-xs">MikroTik</span> <span class="glass px-4 py-2 rounded-xl text-xs">VLAN</span></div>
+                </div>
+<div class="glass p-8 rounded-[40px] hover:border-brand-blue transition-all" data-aos="fade-left">
+    <h4 class="text-brand-blue font-bold mb-2">#Network</h4>
+
+    <h3 class="text-3xl font-black mb-2">Virtual Server Management</h3>
+    <p class="text-slate-400 mb-3 italic">
+        Manajemen Server Virtual
+    </p>
+
+    <p class="text-slate-400 mb-6">
+        Perancangan dan penerapan server virtual yang mampu memantau kinerja sistem,
+        mengelola serta menambahkan fitur manajemen, dan melakukan perawatan rutin
+        untuk menjaga stabilitas dan efisiensi server.
+    </p>
+
+    <div class="flex gap-4">
+        <span class="glass px-4 py-2 rounded-xl text-xs">Proxmox VE</span>
+        <span class="glass px-4 py-2 rounded-xl text-xs">Linux Server</span>
+    </div>
+</div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Social -->
+    <section id="contact" class="py-32 px-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto glass p-12 lg:p-20 rounded-[50px] border-white/10 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-full h-full premium-gradient opacity-5 -z-10"></div>
+            
+            <div class="grid lg:grid-cols-2 gap-20">
+                <div data-aos="fade-right">
+                    <h2 class="text-5xl lg:text-7xl font-black font-heading mb-8">Punya Ide <br> <span class="text-gradient">Besar?</span></h2>
+                    <p class="text-xl text-slate-500 mb-12">Jangan ragu untuk menyapa. Saya selalu terbuka untuk diskusi teknologi atau kolaborasi proyek baru.</p>
+                    
+                    <div class="space-y-8">
+                        <a href="mailto:agungdeniprayogo@email.com" class="flex items-center gap-6 group">
+                            <div class="w-16 h-16 rounded-2xl glass flex items-center justify-center group-hover:bg-brand-purple group-hover:text-white transition-all"><i data-lucide="mail"></i></div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">Email</p>
+                                <p class="text-xl font-black">agungdeniprayogo@email.com</p>
+                            </div>
+                        </a>
+                        <a href="https://wa.me/6285855208754" class="flex items-center gap-6 group">
+                            <div class="w-16 h-16 rounded-2xl glass flex items-center justify-center group-hover:bg-brand-blue group-hover:text-white transition-all"><i data-lucide="message-circle"></i></div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">WhatsApp</p>
+                                <p class="text-xl font-black">+62 858 5520 8754</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div data-aos="fade-left">
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <input type="text" placeholder="Nama" class="w-full glass p-5 rounded-2xl outline-none focus:border-brand-purple transition-all font-bold placeholder:text-slate-500">
+                            <input type="email" placeholder="Email" class="w-full glass p-5 rounded-2xl outline-none focus:border-brand-purple transition-all font-bold placeholder:text-slate-500">
+                        </div>
+                        <input type="text" placeholder="Subjek" class="w-full glass p-5 rounded-2xl outline-none focus:border-brand-purple transition-all font-bold placeholder:text-slate-500">
+                        <textarea rows="5" placeholder="Pesan Anda" class="w-full glass p-5 rounded-2xl outline-none focus:border-brand-purple transition-all font-bold placeholder:text-slate-500"></textarea>
+                        <button type="submit" class="w-full py-6 premium-gradient text-white font-black rounded-2xl shadow-2xl shadow-brand-purple/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 text-lg">
+                            Kirim Sekarang <i data-lucide="send" class="w-5 h-5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Minimal Footer -->
+    <footer class="py-20 px-6 border-t border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center gap-10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center text-white"><i data-lucide="zap"></i></div>
+                <span class="text-3xl font-black font-heading italic">DENI.</span>
+            </div>
+            
+            <div class="flex gap-10 text-xs font-black uppercase tracking-widest text-slate-500">
+                <a href="https://vm.tiktok.com/ZSH78432gDwpe-QqSt2/" class="hover:text-brand-purple">TikTok</a>
+                <a href="https://github.com/denitkj" class="hover:text-brand-purple">GitHub</a>
+                <a href="https://www.instagram.com/agungdenii_?igsh=MXFhMHZzcWl4ODJ2cw==" class="hover:text-brand-purple">Instagram</a>
+                <a href="https://www.facebook.com/profile.php?id=100076292356668" class="hover:text-brand-purple">Facebook</a>
+            </div>
+
+            <p class="text-xs text-slate-400">© 2026 — Dibuat dengan oleh Deni</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Load theme preference immediately (before page fully loads)
+        (function() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+
+        // Initialize Icons
+        lucide.createIcons();
+        
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-out-quint'
+        });
+
+        // Theme Toggle Function
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            lucide.createIcons();
+        }
+
+        // Desktop theme toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', toggleDarkMode);
+        }
+
+        // Mobile theme toggle
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        if (themeToggleMobile) {
+            themeToggleMobile.addEventListener('click', toggleDarkMode);
+        }
+
+        // Navbar Scroll Effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 50) {
+                nav.classList.add('py-2');
+            } else {
+                nav.classList.remove('py-2');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Contact Form Handler
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin w-6 h-6"></i> <span>Mengirim...</span>`;
+            lucide.createIcons();
+
+            setTimeout(() => {
+                btn.classList.replace('premium-gradient', 'bg-green-500');
+                btn.innerHTML = `<i data-lucide="check" class="w-6 h-6"></i> <span>Pesan Terkirim</span>`;
+                lucide.createIcons();
+                this.reset();
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.classList.replace('bg-green-500', 'premium-gradient');
+                    btn.innerHTML = original;
+                    lucide.createIcons();
+                }, 3000);
+            }, 2000);
+        });
+
+        // Certificate Slider Functions
+        function scrollCert(direction) {
+            const container = document.getElementById('cert-container');
+            const scrollAmount = 350;
+            if (direction === 1) {
+                container.scrollLeft += scrollAmount;
+            } else {
+                container.scrollLeft -= scrollAmount;
+            }
+        }
+
+        // Drag-to-scroll for certificates
+        const slider = document.getElementById('cert-container');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+        });
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2;
+            slider.scrollLeft = scrollLeft - walk;
+        });
+
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+
+            if (!menuBtn || !mobileMenu || !menuIcon) {
+                console.error('Navbar element tidak ditemukan');
+                return;
+            }
+
+            let menuOpen = false;
+
+            // Toggle menu on button click
+            menuBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                menuOpen = !menuOpen;
+
+                if (menuOpen) {
+                    mobileMenu.classList.remove('menu-closed');
+                    mobileMenu.classList.add('menu-open');
+                    menuIcon.setAttribute('data-lucide', 'x');
+                } else {
+                    mobileMenu.classList.remove('menu-open');
+                    mobileMenu.classList.add('menu-closed');
+                    menuIcon.setAttribute('data-lucide', 'menu');
+                }
+
+                lucide.createIcons();
+            });
+
+            // Close menu when clicking links
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('menu-open');
+                    mobileMenu.classList.add('menu-closed');
+                    menuIcon.setAttribute('data-lucide', 'menu');
+                    menuOpen = false;
+                    lucide.createIcons();
+                });
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (menuOpen && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                    mobileMenu.classList.remove('menu-open');
+                    mobileMenu.classList.add('menu-closed');
+                    menuIcon.setAttribute('data-lucide', 'menu');
+                    menuOpen = false;
+                    lucide.createIcons();
+                }
+            });
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+            const buttons = document.querySelectorAll(".filter-btn");
+            const cards = document.querySelectorAll(".project-card");
+
+            buttons.forEach(btn => {
+                btn.addEventListener("click", () => {
+
+                    // tombol aktif
+                    buttons.forEach(b => {
+                        b.classList.remove("premium-gradient", "text-white");
+                        b.classList.add("glass");
+                    });
+                    btn.classList.add("premium-gradient", "text-white");
+                    btn.classList.remove("glass");
+
+                    const filter = btn.dataset.filter;
+
+                    cards.forEach((card, i) => {
+                        card.classList.remove("show");
+
+                        if (filter === "all" || card.dataset.category === filter) {
+                            card.style.display = "block";
+
+                            setTimeout(() => {
+                                card.classList.add("show");
+                            }, i * 120);
+                        } else {
+                            setTimeout(() => {
+                                card.style.display = "none";
+                            }, 300);
+                        }
+                    });
+                });
+            });
+        });
+        function openCertModal(title, desc, badge, bClass, imgs) {
+    const m = document.getElementById('cert-modal');
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-desc').innerText = desc;
+    
+    const b = document.getElementById('modal-badge');
+    b.innerText = badge;
+    b.className = `inline-block px-4 py-1 rounded-full text-[10px] font-black uppercase mb-4 ${bClass}`;
+
+    document.getElementById('modal-main-img').src = imgs[0];
+    document.getElementById('sub-img-1').src = imgs[0];
+    document.getElementById('sub-img-2').src = imgs[1];
+    document.getElementById('sub-img-3').src = imgs[2];
+
+    m.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    lucide.createIcons();
+}
+
+function closeCertModal() {
+    document.getElementById('cert-modal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function changePreview(s) {
+    const img = document.getElementById('modal-main-img');
+    img.style.opacity = '0';
+    setTimeout(() => { img.src = s; img.style.opacity = '1'; }, 200);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const projects = document.querySelectorAll(".project-card");
+
+    projects.forEach((card, index) => {
+        setTimeout(() => {
+            card.classList.add("show");
+        }, index * 120);
+    });
+});
+
+
+
+</script>
+
+</body>
+</html>

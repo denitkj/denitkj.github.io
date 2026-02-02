@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Unduhan Neon</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Outfit untuk tampilan modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        
+        /* Custom Scrollbar agar sesuai tema */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+
+        /* Animasi Glow Lambat */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .glow-blob { animation: pulse-glow 8s infinite ease-in-out; }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neon: {
+                            blue: '#06b6d4', // Cyan-500
+                            dark: '#020617', // Slate-950
+                            card: '#0f172a', // Slate-900
+                        }
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px -5px rgba(6, 182, 212, 0.5)',
+                        'neon-hover': '0 0 30px -5px rgba(6, 182, 212, 0.8)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-neon-dark text-slate-300 min-h-screen relative overflow-x-hidden selection:bg-cyan-500 selection:text-white">
+
+    <!-- Background Effects (Cahaya Latar) -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-600/20 rounded-full blur-[120px] glow-blob"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-cyan-600/20 rounded-full blur-[120px] glow-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute top-[40%] left-[50%] translate-x-[-50%] w-[500px] h-[500px] bg-indigo-900/10 rounded-full blur-[100px]"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="relative z-10 pt-12 pb-8 text-center">
+        <div class="container mx-auto px-4">
+            <div class="inline-block mb-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-xs font-bold tracking-widest uppercase">
+                File Server
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]">
+                PORTAL <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">DOWNLOAD</span> FILE
+            </h1>
+            <p class="text-slate-400 max-w-xl mx-auto text-lg">
+                Unduh berkas yang diperlukan sesuai User. <br>
+                <span class="text-cyan-500 text-sm animate-pulse">● System Online</span>
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 container mx-auto px-4 py-8 mb-20">
+        
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+            <!-- KARTU 1 -->
+            <div class="group relative bg-slate-900/60 backdrop-blur-xl border border-slate-700 rounded-2xl p-1 hover:border-cyan-500/50 hover:shadow-neon transition-all duration-300 transform hover:-translate-y-1">
+                <!-- Header Kartu -->
+                <div class="p-5 border-b border-slate-700/50 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 p-[2px] shadow-lg shadow-cyan-500/20">
+                        <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-cyan-400">
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-white font-bold text-lg tracking-wide group-hover:text-cyan-400 transition-colors">Admin</h2>
+                        <p class="text-xs text-slate-500 font-mono"></p>
+                    </div>
+                </div>
+                <!-- List File -->
+                <div class="p-5">
+                    <ul class="space-y-3">
+                        <!-- File Item -->
+                        <li>
+                            <a href="allfile.rar" download class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-cyan-500/50 hover:bg-cyan-900/10 hover:shadow-[inset_0_0_10px_rgba(6,182,212,0.1)] transition-all group/item">
+                                <div class="flex items-center gap-3 overflow-hidden">
+                                    <i data-lucide="file-code" class="w-5 h-5 text-slate-500 group-hover/item:text-cyan-400 transition-colors"></i>
+                                    <span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate">All File LSP</span>
+                                </div>
+                                <i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-cyan-400 transition-colors"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- KARTU 2 -->
+            <div class="group relative bg-slate-900/60 backdrop-blur-xl border border-slate-700 rounded-2xl p-1 hover:border-cyan-500/50 hover:shadow-neon transition-all duration-300 transform hover:-translate-y-1">
+                <div class="p-5 border-b border-slate-700/50 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 p-[2px] shadow-lg shadow-blue-500/20">
+                        <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-blue-400">
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-white font-bold text-lg tracking-wide group-hover:text-blue-400 transition-colors">Bintang Agung Alfarel</h2>
+                        <p class="text-xs text-slate-500 font-mono">XII TKJ 1</p>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <ul class="space-y-3">
+                        <!-- Ulangi struktur <li> dengan href yang berbeda -->
+                        <li><a href="Bintang/bintang template hostpot.rar" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 hover:bg-blue-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">bintang template hostpot.rar</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-blue-400"></i></a></li>
+                        <li><a href="Bintang/bintang template web.zip" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 hover:bg-blue-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">bintang template web.zip</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-blue-400"></i></a></li>
+                        <li><a href="Bintang/bintang tutor dns & web server.docx" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 hover:bg-blue-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">bintang tutor dns & web server.docx</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-blue-400"></i></a></li>
+                        <li><a href="Bintang/bintang tutor http & https.docx" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 hover:bg-blue-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">bintang tutor http & https.docx</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-blue-400"></i></a></li>
+                        <li><a href="Bintang/topologi.rar" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 hover:bg-blue-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">topologi.rar</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-blue-400"></i></a></li>
+                        <li><a href="Bintang/COntoh kebutuhan alat dan bahan.xlsx" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 hover:bg-blue-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Contoh kebutuhan alat dan bahan.xlsx</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-blue-400"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- KARTU 3 -->
+            <div class="group relative bg-slate-900/60 backdrop-blur-xl border border-slate-700 rounded-2xl p-1 hover:border-cyan-500/50 hover:shadow-neon transition-all duration-300 transform hover:-translate-y-1">
+                <div class="p-5 border-b border-slate-700/50 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 p-[2px] shadow-lg shadow-purple-500/20">
+                        <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-purple-400">
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-white font-bold text-lg tracking-wide group-hover:text-purple-400 transition-colors">Gamma 03</h2>
+                        <p class="text-xs text-slate-500 font-mono">ID: USER-003</p>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <ul class="space-y-3">
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 hover:bg-purple-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Render_Final.mp4</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-purple-400"></i></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 hover:bg-purple-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Voice_Over.wav</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-purple-400"></i></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 hover:bg-purple-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Script_Rev2.pdf</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-purple-400"></i></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 hover:bg-purple-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Storyboard.jpg</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-purple-400"></i></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 hover:bg-purple-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Music_Bg.mp3</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-purple-400"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- KARTU 4 -->
+            <div class="group relative bg-slate-900/60 backdrop-blur-xl border border-slate-700 rounded-2xl p-1 hover:border-cyan-500/50 hover:shadow-neon transition-all duration-300 transform hover:-translate-y-1">
+                <div class="p-5 border-b border-slate-700/50 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-600 to-emerald-500 p-[2px] shadow-lg shadow-emerald-500/20">
+                        <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-emerald-400">
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-white font-bold text-lg tracking-wide group-hover:text-emerald-400 transition-colors">Delta 04</h2>
+                        <p class="text-xs text-slate-500 font-mono">ID: USER-004</p>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <ul class="space-y-3">
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Manual_Book.pdf</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-emerald-400"></i></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Config_Server.json</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-emerald-400"></i></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Patch_Notes.txt</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-emerald-400"></i></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Architecture.png</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-emerald-400"></i></a></li>
+                        <li><a href="#" class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-900/10 transition-all group/item"><span class="text-sm font-medium text-slate-300 group-hover/item:text-white truncate ml-2">Audit_Log.csv</span><i data-lucide="download-cloud" class="w-4 h-4 text-slate-600 group-hover/item:text-emerald-400"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-16 text-center">
+            <div class="inline-flex items-center gap-2 text-slate-500 text-xs tracking-widest uppercase border-t border-slate-800 pt-6">
+                <i data-lucide="shield-check" class="w-4 h-4 text-cyan-500"></i>
+                <span>Encrypted Connection &bull; Version 2.0</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script Init Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
