@@ -23,7 +23,7 @@
                         brand: {
                             violet: '#8b5cf6',
                             blue: '#3b82f6',
-                            dark: '#09090b', /* Lebih gelap untuk kesan modern */
+                            dark: '#09090b',
                             slate: '#1e293b',
                             debian: '#d70a53',
                             surface: '#18181b'
@@ -50,8 +50,6 @@
     </script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        /* Minimalist Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
@@ -84,7 +82,6 @@
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
         }
 
-        /* Input Autofill Fix */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
@@ -132,15 +129,29 @@
 
     <main class="flex-grow pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto w-full relative z-10">
         
-        <!-- Hero Input Section -->
-        <div class="max-w-4xl mx-auto mb-16" data-aos="fade-up">
-            <div class="text-center mb-10">
+        <!-- Hero Section -->
+        <div class="max-w-4xl mx-auto mb-8" data-aos="fade-up">
+            <div class="text-center mb-8">
                 <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-slate-900 dark:text-white">
                     Konfigurasi Server <span class="gradient-text">Otomatis</span>
                 </h1>
                 <p class="text-slate-500 dark:text-slate-400 text-lg">Generate script repositori, instalasi, dan DNS Bind9 dalam hitungan detik.</p>
             </div>
 
+            <!-- PERINGATAN ADMIN -->
+            <div class="mb-8 border-l-4 border-brand-debian bg-brand-debian/10 p-4 rounded-r-xl" data-aos="zoom-in" data-aos-delay="100">
+                <div class="flex items-start gap-3">
+                    <i data-lucide="alert-triangle" class="w-6 h-6 text-brand-debian shrink-0 mt-0.5"></i>
+                    <div>
+                        <h3 class="font-bold text-brand-debian uppercase tracking-wider text-sm">Peringatan Penting!</h3>
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mt-1">
+                            Untuk menggunakan website ini, Anda <strong>WAJIB</strong> menguasai konfigurasi secara manual terlebih dahulu. Admin <strong>TIDAK BERTANGGUNG JAWAB</strong> atas kesalahan konfigurasi atau kerusakan sistem karena Anda sudah diperingati.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Card -->
             <div class="glass-panel p-2 rounded-[2rem] shadow-2xl">
                 <div class="bg-white/50 dark:bg-brand-surface rounded-[1.5rem] p-6 md:p-8 border border-slate-200 dark:border-white/5">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -185,7 +196,6 @@
                         <i data-lucide="copy" class="w-3 h-3"></i> Copy
                     </button>
                 </div>
-                <!-- Terminal Window -->
                 <div class="terminal-window rounded-xl overflow-hidden flex flex-col h-[500px]">
                     <div class="bg-white/5 px-4 py-3 flex items-center gap-2 border-b border-white/5">
                         <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
@@ -238,9 +248,9 @@
         </div>
 
         <!-- Empty State -->
-        <div id="placeholder" class="py-24 text-center" data-aos="zoom-in">
-            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-slate-100 dark:bg-white/5 mb-6 ring-1 ring-slate-200 dark:ring-white/10">
-                <i data-lucide="command" class="w-10 h-10 text-slate-300 dark:text-slate-600"></i>
+        <div id="placeholder" class="py-12 text-center" data-aos="zoom-in">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-white/5 mb-6 ring-1 ring-slate-200 dark:ring-white/10">
+                <i data-lucide="command" class="w-8 h-8 text-slate-300 dark:text-slate-600"></i>
             </div>
             <p class="text-slate-400 text-sm font-medium tracking-wide uppercase">Menunggu Input Parameter</p>
         </div>
@@ -269,7 +279,6 @@
             const lastOctet = ipParts[3];
             const reverseZoneBase = `${ipParts[2]}.${ipParts[1]}.${ipParts[0]}`;
 
-            // --- STEP 1: Repo & Update ---
             const script1 = `# --- 1. REPOSITORY & UPDATE ---
 cat <<EOF > /etc/apt/sources.list
 deb http://deb.debian.org/debian bullseye main contrib non-free
@@ -282,24 +291,16 @@ deb http://deb.debian.org/debian bullseye-updates main contrib non-free
 deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free
 EOF
 
-# Update paket sistem
 apt update && apt upgrade -y`;
 
-            // --- STEP 2: Install Packages ---
             const script2 = `# --- 2. INSTALL PACKAGES ---
-# Menginstall Bind9 dan DNSUtils
-apt install bind9 dnsutils -y
-`;
+apt install bind9 dnsutils -y`;
 
-            // --- STEP 3: Config DNS ---
             const script3 = `# --- 3. BIND9 CONFIGURATION ---
 cd /etc/bind
-
-# Membuat salinan file konfigurasi
 cp db.127 db.reverse
 cp db.local db.forward
 
-# Konfigurasi Forward Zone
 cat <<EOF > /etc/bind/db.forward
 ; BIND data file for ${domain}
 \\$TTL    604800
@@ -315,7 +316,6 @@ cat <<EOF > /etc/bind/db.forward
 www     IN      A       ${ip}
 EOF
 
-# Konfigurasi Reverse Zone
 cat <<EOF > /etc/bind/db.reverse
 ; BIND reverse data file for ${domain}
 \\$TTL    604800
@@ -330,7 +330,6 @@ cat <<EOF > /etc/bind/db.reverse
 ${lastOctet}       IN      PTR     ${domain}.
 EOF
 
-# Mendaftarkan Zone
 cat <<EOF >> /etc/bind/named.conf.default-zones
 
 zone "${domain}" {
@@ -344,28 +343,21 @@ zone "${reverseZoneBase}.in-addr.arpa" {
 };
 EOF
 
-# Set DNS Resolver
 echo "nameserver ${ip}" > /etc/resolv.conf
-
-# Restart Service
 systemctl restart bind9
 
-# Verifikasi
 echo "--- Testing DNS ---"
 nslookup ${domain}
 nslookup www.${domain}`;
 
-            // Inject content
             document.getElementById('output1').value = script1;
             document.getElementById('output2').value = script2;
             document.getElementById('output3').value = script3;
             
-            // Show results
             const placeholder = document.getElementById('placeholder');
             const results = document.getElementById('resultsContainer');
 
             if (!results.classList.contains('hidden')) {
-                // If already showing, just flash the code
                 results.classList.add('opacity-50');
                 setTimeout(() => results.classList.remove('opacity-50'), 200);
             } else {
@@ -383,8 +375,6 @@ nslookup www.${domain}`;
             document.execCommand('copy');
             
             const btn = document.getElementById(btnId);
-            const originalIcon = btn.innerHTML;
-            
             btn.innerHTML = `<i data-lucide="check-circle" class="w-3 h-3 text-emerald-400"></i> <span class="text-emerald-400">Copied</span>`;
             lucide.createIcons();
             
