@@ -182,7 +182,7 @@
                         
                         <div>
                             <label class="text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em] mb-2 block">Target Domain (Custom)</label>
-                            <input type="text" id="blockTarget" placeholder="deni.com" class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border-2 border-transparent focus:border-brand-violet transition-all outline-none font-bold">
+                            <input type="text" id="blockTarget" placeholder="example.com" class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border-2 border-transparent focus:border-brand-violet transition-all outline-none font-bold">
                         </div>
 
                         <!-- Multi-Interface Selection -->
@@ -374,14 +374,15 @@ resDiv.innerHTML = `
         }
 
 function generateBlockScript() {
-    const target = document.getElementById('blockTarget').value || 'detik.com';
+    const targetRaw = document.getElementById('blockTarget').value || 'example.com';
+    const targetEscaped = targetRaw.replace(/\./g, '\\\\.');
     const admin = document.getElementById('adminName').value || 'deni';
     const selectedIfaces = Array.from(
         document.querySelectorAll('input[name="iface"]:checked')
     ).map(i => i.value);
 
     let script = `# MIKROTIK SCRIPT BY DENI\n`;
-    script += `# Target: ${target}\n`;
+    script += `# Target: ${targetRaw}\n`;
     script += `# Date: ${new Date().toLocaleDateString()}\n\n`;
 
     /* ==================================
@@ -392,7 +393,7 @@ function generateBlockScript() {
         script += `/ip proxy set enabled=yes port=8080 cache-administrator="${admin}" anonymous=yes\n`;
         
         script += `# 2. Aturan Blokir Proxy\n`;
-        script += `/ip proxy access add dst-host="*${target}*" action=deny comment="Block_${target}"\n\n`;
+        script += `/ip proxy access add dst-host="*${targetRaw}*" action=deny comment="Block_${targetRaw}"\n\n`;
 
         script += `# 3. Redirect Port 80 ke Proxy\n`;
         if (selectedIfaces.length > 0) {
@@ -405,19 +406,22 @@ function generateBlockScript() {
     } 
 
     /* ==================================
-       MODE HTTPS (TLS-Host / Layer 7)
+       MODE HTTPS (Layer7 Protocol)
        ================================== */
     else {
-        script += `# Menghapus rule lama agar tidak duplikat\n`;
-        script += `/ip firewall filter remove [find comment="Block_HTTPS_${target}"]\n\n`;
+        script += `# Konfigurasi Layer7 Protocol\n`;
+        script += `/ip firewall layer7-protocol\n`;
+        script += `add name=blockhttps regexp="^.*(${targetEscaped}).*\\$"\n\n`;
 
-        script += `# Blokir HTTPS menggunakan TLS-HOST (Lebih Akurat dari L7)\n`;
+        script += `# Firewall Filter untuk memblokir trafik HTTPS (Port 443)\n`;
+        script += `/ip firewall filter\n`;
+        
         if (selectedIfaces.length > 0) {
             selectedIfaces.forEach(iface => {
-                script += `/ip firewall filter add chain=forward protocol=tcp dst-port=443 in-interface="${iface}" tls-host="*${target}*" action=drop comment="Block_HTTPS_${target}"\n`;
+                script += `add chain=forward protocol=tcp dst-port=443 in-interface="${iface}" layer7-protocol=blockhttps action=drop comment="Block_HTTPS_${targetRaw}_${iface}"\n`;
             });
         } else {
-            script += `/ip firewall filter add chain=forward protocol=tcp dst-port=443 tls-host="*${target}*" action=drop comment="Block_HTTPS_${target}"\n`;
+            script += `add chain=forward protocol=tcp dst-port=443 layer7-protocol=blockhttps action=drop comment="Block_HTTPS_${targetRaw}"\n`;
         }
     }
 
