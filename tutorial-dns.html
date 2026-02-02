@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering DNS Server - deni.local</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+        
+        .step-card {
+            @apply bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 transition-all duration-300;
+        }
+        
+        .code-block {
+            @apply relative group mt-4 overflow-hidden rounded-xl bg-slate-900 dark:bg-black border border-slate-800;
+        }
+
+        .step-badge {
+            @apply flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white font-bold text-xl shadow-lg shadow-blue-500/30 mr-6 shrink-0;
+        }
+
+        .nano-tip {
+            @apply mt-3 flex items-center text-xs font-mono text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg border border-blue-100 dark:border-blue-800;
+        }
+
+        .output-header {
+            @apply text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2 flex items-center;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { @apply bg-slate-100 dark:bg-slate-900; }
+        ::-webkit-scrollbar-thumb { @apply bg-slate-300 dark:bg-slate-700 rounded-full; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 p-2 rounded-xl shadow-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <span class="font-extrabold text-xl tracking-tight hidden sm:block">BIND9 Docs</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400">
+                    <svg id="sun-icon" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                    <svg id="moon-icon" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-16">
+        <!-- Hero -->
+        <div class="mb-20 text-center">
+            <h1 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
+                Konfigurasi <span class="text-blue-600 underline decoration-blue-500/30">DNS Server</span> Manual
+            </h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                Panduan mendalam menggunakan editor <span class="font-mono text-blue-600 font-bold italic">nano</span> untuk mengonfigurasi BIND9 di Debian.
+            </p>
+        </div>
+
+        <!-- Guide Steps -->
+        <div class="space-y-12">
+            
+            <!-- Step 1 -->
+            <section id="setup" class="step-card group p-8">
+                <div class="flex items-start">
+                    <div class="step-badge">1</div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3 tracking-tight">Instalasi Paket Utama</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mb-6">Pastikan server terhubung ke internet untuk mengunduh paket Bind9 dan DNS Utilities.</p>
+                        
+                        <div class="code-block">
+                            <pre class="p-5 text-emerald-400 text-sm font-mono overflow-x-auto"><code>apt update && apt install bind9 dnsutils -y</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition backdrop-blur-md border border-white/10">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 2 -->
+            <section class="step-card group p-8">
+                <div class="flex items-start">
+                    <div class="step-badge">2</div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3 tracking-tight">Salin Template Zone</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mb-4">Kita tidak membuat file dari nol, melainkan menyalin dari template yang sudah disediakan Bind9.</p>
+                        <div class="code-block">
+                            <pre class="p-5 text-slate-300 text-sm font-mono"><code>cd /etc/bind
+cp db.local db.forward
+cp db.127 db.reverse</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 3 -->
+            <section class="step-card group p-8">
+                <div class="flex items-start">
+                    <div class="step-badge">3</div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3 tracking-tight">Edit Forward Zone</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mb-4">Mengatur pemetaan nama domain ke alamat IP.</p>
+                        
+                        <div class="nano-tip">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                            Gunakan perintah: <strong>nano db.forward</strong>
+                        </div>
+
+                        <div class="code-block border-l-4 border-blue-500">
+                            <pre class="p-5 text-slate-300 text-sm font-mono overflow-x-auto"><code>$TTL 604800
+@   IN  SOA deni.local. root.deni.local. (
+              2         ; Serial
+         604800         ; Refresh
+          86400         ; Retry
+        2419200         ; Expire
+         604800 )       ; Negative Cache TTL
+;
+@   IN  NS  deni.local.
+@   IN  A   192.168.4.20
+www IN  A   192.168.4.20</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 4 -->
+            <section class="step-card group p-8">
+                <div class="flex items-start">
+                    <div class="step-badge">4</div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3 tracking-tight">Edit Reverse Zone</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mb-4">Mengatur pemetaan alamat IP kembali ke nama domain.</p>
+
+                        <div class="nano-tip">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                            Gunakan perintah: <strong>nano db.reverse</strong>
+                        </div>
+
+                        <div class="code-block border-l-4 border-emerald-500">
+                            <pre class="p-5 text-slate-300 text-sm font-mono overflow-x-auto"><code>$TTL 604800
+@   IN  SOA deni.local. root.deni.local. (
+              1         ; Serial
+         604800         ; Refresh
+          86400         ; Retry
+        2419200         ; Expire
+         604800 )       ; Negative Cache TTL
+;
+@   IN  NS  deni.local.
+20  IN  PTR deni.local.</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 5 -->
+            <section class="step-card group p-8">
+                <div class="flex items-start">
+                    <div class="step-badge">5</div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3 tracking-tight">Daftarkan Zone Baru</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mb-4">Memberitahu Bind9 di mana lokasi file database yang telah kita buat.</p>
+
+                        <div class="nano-tip">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                            Gunakan perintah: <strong>nano named.conf.default-zones</strong>
+                        </div>
+
+                        <div class="code-block border-l-4 border-amber-500">
+                            <pre class="p-5 text-slate-300 text-sm font-mono overflow-x-auto"><code>zone "deni.local" {
+    type master;
+    file "/etc/bind/db.forward";
+};
+
+zone "4.168.192.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.reverse";
+};</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition">Copy</button>
+                        </div>
+                        <p class="mt-4 text-sm text-slate-500 italic">Jangan lupa restart bind9: <code class="bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">systemctl restart bind9</code></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 6 (NEW) -->
+            <section class="step-card group p-8">
+                <div class="flex items-start">
+                    <div class="step-badge">6</div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3 tracking-tight">Konfigurasi DNS Resolver</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mb-4">Daftarkan IP server Anda ke sistem agar dapat mengenali domain lokal.</p>
+
+                        <div class="nano-tip">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                            Gunakan perintah: <strong>nano /etc/resolv.conf</strong>
+                        </div>
+
+                        <div class="code-block border-l-4 border-indigo-500">
+                            <pre class="p-5 text-slate-300 text-sm font-mono overflow-x-auto"><code>nameserver 192.168.4.20</code></pre>
+                            <button onclick="copyCode(this)" class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 7 (NEW) -->
+            <section class="step-card group p-8">
+                <div class="flex items-start">
+                    <div class="step-badge">7</div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-3 tracking-tight">Uji Coba (Testing)</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mb-4">Gunakan perintah <code class="font-mono">nslookup</code> untuk memverifikasi apakah DNS sudah menjawab dengan benar.</p>
+
+                        <!-- Test Utama -->
+                        <div class="space-y-4">
+                            <div>
+                                <span class="text-sm font-bold text-blue-500">A. Cek Domain Utama</span>
+                                <div class="code-block">
+                                    <pre class="p-5 text-emerald-400 text-sm font-mono overflow-x-auto"><code>nslookup deni.local</code></pre>
+                                </div>
+                                <div class="mt-2 bg-slate-100 dark:bg-slate-900/50 p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+                                    <div class="output-header">Contoh Output Berhasil</div>
+                                    <pre class="text-xs font-mono text-slate-500">Server:  192.168.4.20
+Address: 192.168.4.20#53
+
+Name:    deni.local
+Address: 192.168.4.20</pre>
+                                </div>
+                            </div>
+
+                            <div>
+                                <span class="text-sm font-bold text-blue-500">B. Cek Subdomain (WWW)</span>
+                                <div class="code-block">
+                                    <pre class="p-5 text-emerald-400 text-sm font-mono overflow-x-auto"><code>nslookup www.deni.local</code></pre>
+                                </div>
+                                <div class="mt-2 bg-slate-100 dark:bg-slate-900/50 p-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+                                    <div class="output-header">Contoh Output Berhasil</div>
+                                    <pre class="text-xs font-mono text-slate-500">Server:  192.168.4.20
+Address: 192.168.4.20#53
+
+Name:    www.deni.local
+Address: 192.168.4.20</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Automation CTA Section -->
+        <div class="mt-24 p-1 rounded-3xl bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 shadow-2xl">
+            <div class="bg-white dark:bg-slate-900 rounded-[calc(1.5rem-1px)] p-10 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 mb-6">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                </div>
+                <h2 class="text-3xl font-black text-slate-900 dark:text-white mb-4 italic uppercase">Peringatan Keras!</h2>
+                <p class="text-slate-600 dark:text-slate-400 mb-10 max-w-xl mx-auto leading-relaxed">
+                    Tombol di bawah ini akan membawa Anda ke sistem otomatisasi DNS. Namun, Anda <strong>Wajib</strong> menguasai konfigurasi manual di atas terlebih dahulu agar memahami cara kerja jaringan yang sebenarnya.
+                </p>
+                
+                <a href="dns.html" target="_blank" class="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl shadow-blue-500/30 uppercase tracking-widest text-sm">
+                    Lanjut ke Website Otomatis
+                    <svg class="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                </a>
+                
+                <p class="mt-6 text-xs text-slate-400 font-medium">Hanya untuk mereka yang sudah mahir konfigurasi manual.</p>
+            </div>
+        </div>
+
+        <footer class="mt-20 pt-10 border-t border-slate-200 dark:border-slate-800 text-center">
+            <p class="text-slate-400 text-sm font-medium italic">© 2024 Jaringan Komputer Modern. Dokumentasi Internal Debian.</p>
+        </footer>
+    </main>
+
+    <!-- Toast UI -->
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-3.5 rounded-2xl shadow-2xl transition-all duration-500 ease-out translate-y-32 opacity-0 flex items-center space-x-3 font-bold z-[100]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        <span>Berhasil disalin ke clipboard!</span>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const sun = document.getElementById('sun-icon');
+            const moon = document.getElementById('moon-icon');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                sun.classList.add('hidden');
+                moon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                sun.classList.remove('hidden');
+                moon.classList.add('hidden');
+            }
+        }
+
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('sun-icon').classList.remove('hidden');
+            document.getElementById('moon-icon').classList.add('hidden');
+        }
+
+        function copyCode(button) {
+            const code = button.parentElement.querySelector('code').innerText;
+            const originalText = button.innerText;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            button.innerText = 'Copied!';
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+                button.innerText = originalText;
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
